@@ -64,17 +64,6 @@ public class Lexico implements Constants {
         return "";
     }
 
-    public int getLinha(List<Integer> linhas, int posicao) {
-        int linha = 1;
-        for (Integer l : linhas) {
-            if (posicao <= l) {
-                return linha;
-            }
-            linha++;
-        }
-        return linha;
-    }
-
     public String getInput() {
         return this.input;
     }
@@ -193,5 +182,16 @@ public class Lexico implements Constants {
         } else {
             return (char) -1;
         }
+    }
+
+    public int getLinha(List<Integer> linhas) {
+        int linha = 1;
+        for (Integer l : linhas) {
+            if (position <= l) {
+                return linha;
+            }
+            linha++;
+        }
+        return linha;
     }
 }

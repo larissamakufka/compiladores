@@ -411,22 +411,37 @@ public class Compilador extends JFrame {
     }//GEN-LAST:event_jbRecortarActionPerformed
 
     private void jbCompilarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbCompilarActionPerformed
-        try (StringWriter sw = new StringWriter()) {
-            String erro = compilar(sw);
-
-            if (!"".equals(erro)) {
-                taMensagens.setText(erro);
+        Lexico lexico = new Lexico();
+        try {
+            lexico.setInput(taEditor.getText());
+            taMensagens.setText("");
+            CarregaLinhas();
+            boolean ehValido = false;
+            Token t;
+            String tokens = "linha   classe               lexema"; //7 19 +++++
+            int i = 0;
+            while ((t = lexico.nextToken()) != null) {
+                if (!"".equals(lexico.getNomeClasse(t.getId()))) {
+                    int linha = lexico.getLinha(linhas);
+                    tokens += "\n" + linha;
+                    ehValido = true;
+                    break;
+                }
+                i++;
+            }
+            if (ehValido) {
+                taMensagens.setText(tokens + "\nprograma compilado com sucesso");
             } else {
-                File ilFile = new File(nomeArquivo.getParentFile(), getNomePrograma() + ".il");
-                salvar(ilFile, sw.toString());
+                taMensagens.setText("nenhum programa para compilar");
             }
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-            String msg = ioe.getMessage();
-            if (msg.isEmpty()) {
-                msg = ioe.toString();
+        } catch (LexicalError e) {
+            String erro = "Erro na linha " + lexico.getLinha(linhas) + " - ";
+            if (e.getMessage().equals("símbolo inválido")) {
+                erro += lexico.getInput() + " " + e.getMessage();
+            } else {
+                erro += e.getMessage();
             }
-            return;
+            taMensagens.setText(erro);
         }
     }//GEN-LAST:event_jbCompilarActionPerformed
 
@@ -455,40 +470,6 @@ public class Compilador extends JFrame {
     private void taEditorKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_taEditorKeyPressed
         lbBarraStatus.setText("" + caminho);
     }//GEN-LAST:event_taEditorKeyPressed
-
-    private String compilar(Writer outputWriter) throws IOException {
-        salvar(".txt");
-        Lexico lexico = new Lexico();
-        try {
-            lexico.setInput(taEditor.getText());
-            taMensagens.setText("");
-            CarregaLinhas();
-            boolean haPrograma = false;
-            Token t;
-            while ((t = lexico.nextToken()) != null) {
-                if (!"".equals(lexico.getNomeClasse(t.getId()))) {
-                    haPrograma = true;
-                    break;
-                }
-            }
-            if (haPrograma) {
-                lexico.setInput(taEditor.getText());
-                taMensagens.setText("programa compilado com sucesso");
-            } else {
-                taMensagens.setText("nenhum programa para compilar");
-            }
-        } catch (LexicalError e) {
-            String erro = "Erro na linha " + lexico.getLinha(linhas, e.getPosition()) + " - ";
-            if (e.getMessage().equals("símbolo inválido")) {
-                erro += lexico.getInput() + " " + e.getMessage();
-            } else {
-                erro += e.getMessage();
-            }
-            taMensagens.setText(erro);
-            return erro;
-        }
-        return "";
-    }
 
     private void CarregaLinhas() {
         linhas = new ArrayList<>();
