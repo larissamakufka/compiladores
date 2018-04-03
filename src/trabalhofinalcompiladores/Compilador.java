@@ -419,15 +419,15 @@ public class Compilador extends JFrame {
             boolean ehValido = false;
             Token t;
             String tokens = "linha   classe               lexema"; //7 19 +++++
-            int i = 0;
             while ((t = lexico.nextToken()) != null) {
                 if (!"".equals(lexico.getNomeClasse(t.getId()))) {
                     int linha = lexico.getLinha(linhas);
+                    String classe = lexico.getNomeClasse(t.getId());
+                    //String lexema = lexico.get;
                     tokens += "\n" + linha;
                     ehValido = true;
                     break;
                 }
-                i++;
             }
             if (ehValido) {
                 taMensagens.setText(tokens + "\nprograma compilado com sucesso");
