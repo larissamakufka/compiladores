@@ -1,5 +1,6 @@
 package trabalhofinalcompiladores;
 
+import trabalhofinalcompiladores.Comum.Lexico.LexicalError;
 import java.awt.Label;
 import trabalhofinalcompiladores.Comum.Utils.CompiladorConst;
 import java.awt.event.ActionEvent;
@@ -27,6 +28,8 @@ import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import trabalhofinalcompiladores.Comum.Lexico.Lexico;
+import trabalhofinalcompiladores.Comum.Lexico.Token;
 
 public class Compilador extends JFrame {
 
@@ -403,7 +406,15 @@ public class Compilador extends JFrame {
     }//GEN-LAST:event_jbRecortarActionPerformed
 
     private void jbCompilarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbCompilarActionPerformed
-        taMensagens.setText("compilação de programas ainda não foi implementada");
+        Lexico lexico = new Lexico();
+        lexico.setInput(taEditor.getText());
+        try {
+            Token t = null;
+            while ((t = lexico.nextToken()) != null) {
+                System.out.println(t.getLexeme());
+            }
+        } catch (LexicalError e) {
+        }
     }//GEN-LAST:event_jbCompilarActionPerformed
 
     private void jbEquipeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbEquipeActionPerformed
@@ -412,7 +423,7 @@ public class Compilador extends JFrame {
 
     public String getNomePrograma() {
         if (nomeArquivo != null) {
-            return nomeArquivo.getName().replaceFirst("(?<=.)\\.[^\\.]+?$", "").replaceAll("\\s|\\.", "_"); 
+            return nomeArquivo.getName().replaceFirst("(?<=.)\\.[^\\.]+?$", "").replaceAll("\\s|\\.", "_");
         }
         return "";
     }
@@ -423,7 +434,7 @@ public class Compilador extends JFrame {
             file.createNewFile();
         }
 
-        try (FileOutputStream fos = new FileOutputStream(file); 
+        try (FileOutputStream fos = new FileOutputStream(file);
                 BufferedOutputStream bos = new BufferedOutputStream(fos)) {
             fos.write(content.getBytes());
         }
@@ -591,5 +602,5 @@ public class Compilador extends JFrame {
     public void setTaMensagens(JTextArea taMensagens) {
         this.taMensagens = taMensagens;
     }
-    
+
 }
