@@ -14,6 +14,10 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.AbstractAction;
@@ -35,6 +39,7 @@ public class Compilador extends JFrame {
 
     private String caminho;
     private File nomeArquivo;
+    private List<Integer> linhas;
 
     public Compilador() {
         initComponents();
@@ -406,14 +411,22 @@ public class Compilador extends JFrame {
     }//GEN-LAST:event_jbRecortarActionPerformed
 
     private void jbCompilarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbCompilarActionPerformed
-        Lexico lexico = new Lexico();
-        lexico.setInput(taEditor.getText());
-        try {
-            Token t = null;
-            while ((t = lexico.nextToken()) != null) {
-                System.out.println(t.getLexeme());
+        try (StringWriter sw = new StringWriter()) {
+            String erro = compilar(sw);
+
+            if (!"".equals(erro)) {
+                taMensagens.setText(erro);
+            } else {
+                File ilFile = new File(nomeArquivo.getParentFile(), getNomePrograma() + ".il");
+                salvar(ilFile, sw.toString());
             }
-        } catch (LexicalError e) {
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+            String msg = ioe.getMessage();
+            if (msg.isEmpty()) {
+                msg = ioe.toString();
+            }
+            return;
         }
     }//GEN-LAST:event_jbCompilarActionPerformed
 
@@ -442,6 +455,51 @@ public class Compilador extends JFrame {
     private void taEditorKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_taEditorKeyPressed
         lbBarraStatus.setText("" + caminho);
     }//GEN-LAST:event_taEditorKeyPressed
+
+    private String compilar(Writer outputWriter) throws IOException {
+        salvar(".txt");
+        Lexico lexico = new Lexico();
+        try {
+            lexico.setInput(taEditor.getText());
+            taMensagens.setText("");
+            CarregaLinhas();
+            boolean haPrograma = false;
+            Token t;
+            while ((t = lexico.nextToken()) != null) {
+                if (!"".equals(lexico.getNomeClasse(t.getId()))) {
+                    haPrograma = true;
+                    break;
+                }
+            }
+            if (haPrograma) {
+                lexico.setInput(taEditor.getText());
+                taMensagens.setText("programa compilado com sucesso");
+            } else {
+                taMensagens.setText("nenhum programa para compilar");
+            }
+        } catch (LexicalError e) {
+            String erro = "Erro na linha " + lexico.getLinha(linhas, e.getPosition()) + " - ";
+            if (e.getMessage().equals("símbolo inválido")) {
+                erro += lexico.getInput() + " " + e.getMessage();
+            } else {
+                erro += e.getMessage();
+            }
+            taMensagens.setText(erro);
+            return erro;
+        }
+        return "";
+    }
+
+    private void CarregaLinhas() {
+        linhas = new ArrayList<>();
+        char[] chars = taEditor.getText().toCharArray();
+        for (int i = 0; i < chars.length; i++) {
+            if (chars[i] == '\n') {
+                linhas.add(i);
+            }
+        }
+        linhas.add(chars.length);
+    }
 
     public static void main(String args[]) {
         try {

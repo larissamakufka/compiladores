@@ -1,0 +1,3 @@
+\*isso é um comentário*\
+   print i_area   =
+"valor"    01,0
