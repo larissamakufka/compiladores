@@ -5,21 +5,22 @@ Language = Java
 ScannerName = Lexico
 ScannerCaseSensitive = true
 ScannerTable = Compact
-Input = String
+Input = Stream
 #RegularDefinitions
 letra: [a-z]|[A-Z]
 underline: _
 dig19: [1-9]
 dig09: [0-9]
 caracter: [^\n\\\"]
+WS : [\ \t\n\r]
+comen_linha: \\\\.*
+comen_bloco: \\\*([^\*])*\*\\
 #Tokens
 //tokens
 identificador:{letra}({letra}|{dig09}|{underline}({letra}|{dig09}))*{underline}?
 const_inteira: (0|{dig19}+{dig09}*)
 const_real: (0|{dig19}+{dig09}*),{dig09}+
 const_caracter: \"({caracter}*|\\\"|\\\\)*\"
-comen_linha: \\\\.*
-comen_bloco: \\\*([^\*])*\*\\
 
 //Palavras reservadas
 bool       = identificador : "bool"
@@ -65,5 +66,6 @@ whileTrue  = identificador : "whileTrue"
 "/"
 
 //ignorar espaços em branco e comentários
- : comen_linha
- : comen_bloco
+ : {comen_linha}
+ : {comen_bloco}
+ : {WS}*
