@@ -13,9 +13,57 @@ dig19: [1-9]
 dig09: [0-9]
 caracter: [^\n\\\"]
 #Tokens
-identificador:{letra}({letra}|{dig09}|{underline}({letra}|{dig09}))*underline?
+//tokens
+identificador:{letra}({letra}|{dig09}|{underline}({letra}|{dig09}))*{underline}?
 const_inteira: (0|{dig19}+{dig09}*)
-const_real: (0|{dig19}+{dig09}*),dig09+
-const_caracter: \"(caracter*|\\\"|\\\\)*\"
+const_real: (0|{dig19}+{dig09}*),{dig09}+
+const_caracter: \"({caracter}*|\\\"|\\\\)*\"
 comen_linha: \\\\.*
 comen_bloco: \\\*([^\*])*\*\\
+
+//Palavras reservadas
+bool       = identificador : "bool"
+consts     = identificador : "consts"
+def        = identificador : "def"
+end        = identificador : "end"
+execute    = identificador : "execute"
+false      = identificador : "false"
+float      = identificador : "float"
+get        = identificador : "get"
+ifFalse    = identificador : "ifFalse"
+ifTrue     = identificador : "ifTrue"
+input      = identificador : "input"
+int        = identificador : "int"
+print      = identificador : "print"
+println    = identificador : "println"
+set        = identificador : "set"
+str        = identificador : "str"
+true       = identificador : "true"
+types      = identificador : "types"
+var        = identificador : "var"
+whileFalse = identificador : "whileFalse"
+whileTrue  = identificador : "whileTrue"
+
+//Símbolos especiais
+":"
+"("
+")"
+"="
+":="
+","
+"&&"
+"||"
+"!"
+"!="
+"<"
+"<="
+">"
+">="
+"+"
+"-"
+"*"
+"/"
+
+//ignorar espaços em branco e comentários
+ : comen_linha
+ : comen_bloco
