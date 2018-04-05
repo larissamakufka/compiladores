@@ -14,8 +14,6 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.StringWriter;
-import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -58,6 +56,8 @@ public class Compilador extends JFrame {
         adicionaActionPerformed(jbCompilar, KeyStroke.getKeyStroke("F9"));
         adicionaActionPerformed(jbEquipe, KeyStroke.getKeyStroke("F1"));
 
+        linhas = new ArrayList<>();
+        
         caminho = "";
         lbBarraStatus.setText(caminho);
     }
@@ -415,22 +415,25 @@ public class Compilador extends JFrame {
         try {
             lexico.setInput(taEditor.getText());
             taMensagens.setText("");
-            CarregaLinhas();
+            loadLines(taEditor.getText());
             boolean ehValido = false;
             Token t;
-            String tokens = "linha   classe               lexema"; //7 19 +++++
+            String tokens = "linha   classe               lexema";
             while ((t = lexico.nextToken()) != null) {
                 if (!"".equals(lexico.getNomeClasse(t.getId()))) {
-                    int linha = lexico.getLinha(linhas);
-                    String classe = lexico.getNomeClasse(t.getId());
-                    //String lexema = lexico.get;
-                    tokens += "\n" + linha;
+                    String linhaTemp = String.valueOf(getLine(linhas, t.getPosition()));
+                    String lexicoTemp = lexico.getNomeClasse(t.getId());
+
+                    String linha = linhaTemp + defineSpace(linhaTemp.length(), 8);
+                    String classe = lexicoTemp + defineSpace(lexicoTemp.length(), 21);
+                    String lexema = t.getLexeme();
+                    
+                    tokens += "\n" + linha + classe + lexema;
                     ehValido = true;
-                    break;
                 }
             }
             if (ehValido) {
-                taMensagens.setText(tokens + "\nprograma compilado com sucesso");
+                taMensagens.setText(tokens + "\n\nprograma compilado com sucesso");
             } else {
                 taMensagens.setText("nenhum programa para compilar");
             }
@@ -471,9 +474,27 @@ public class Compilador extends JFrame {
         lbBarraStatus.setText("" + caminho);
     }//GEN-LAST:event_taEditorKeyPressed
 
-    private void CarregaLinhas() {
-        linhas = new ArrayList<>();
-        char[] chars = taEditor.getText().toCharArray();
+    public String defineSpace(int count, int maxLenght) {
+        String space = "";
+        for (int i = count; i < maxLenght; i++) {
+            space += " ";
+        }
+        return space;
+    }
+
+    private static int getLine(List<Integer> linesPosition, int position) {
+        int line = 1;
+        for (Integer linePosition : linesPosition) {
+            if (position <= linePosition) {
+                return line;
+            }
+            line++;
+        }
+        return 0;
+    }
+
+    private void loadLines(String input) {
+        char[] chars = input.toCharArray();
         for (int i = 0; i < chars.length; i++) {
             if (chars[i] == '\n') {
                 linhas.add(i);

@@ -63,14 +63,8 @@ public class InterfaceTest {
     }
 
     @Test
-    public void buttonCompileClickTest() {
-        compilador.getJbCompilar().doClick();
-        assertTrue(compilador.getTaMensagens().getText().equals("compilação de programas ainda não foi implementada"));
-    }
-
-    @Test
     public void buttonAboutClickTest() {
-        compilador.getJbCompilar().doClick();
+        compilador.getJbEquipe().doClick();
         assertTrue(compilador.getTaMensagens().getText().equals(" - Douglas Eduardo Bauler; \n - Jefferson do Nascimento Júnior; \n - Larissa Sindy Makufka Schlichting."));
     }
 }
