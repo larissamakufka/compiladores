@@ -218,10 +218,10 @@ public class LexicoTest {
         String entrada = "\\* isso é um comentário + ! ? #4%%$ *\\\n\n" +
                          "bool teste\n" +
                          "int teste2\n" +
-                         "float L21\n\n" +
-                         "print teste\n\n" +
+                         "float L21\n" +
+                         "print teste\n" +
                          "ifTrue\n" +
-                         "teste := teste2 > L21\n\n" +
+                         "teste := teste2 > L21\n" +
                          "whileFalse\n" +
                          "teste := L21";
 
