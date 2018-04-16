@@ -14,7 +14,7 @@ dig09: [0-9]
 caracter: [^\n\\\"]
 WS : [\ \t\n\r]
 comen_linha: \\\\.*
-comen_bloco: \\\*([^\*])*\*\\
+comen_bloco: /\*([^\*])*\*/
 #Tokens
 //tokens
 identificador:{letra}({letra}|{dig09}|{underline}({letra}|{dig09}))*{underline}?
