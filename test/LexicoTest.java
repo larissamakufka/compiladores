@@ -230,9 +230,33 @@ public class LexicoTest {
                        "8       identificador        teste2\n" +
                        "8       símbolo especial     >\n" +
                        "8       identificador        L21\n" +
+                       "9       palavra reservada    whileFalse\n" +
                        "10      identificador        teste\n" +
                        "10      símbolo especial     :=\n" +
                        "10      identificador        L21\n" +
+                       "\n" +
+                       "programa compilado com sucesso"; 
+
+        compilador.getTaEditor().setText(entrada);
+        compilador.getJbCompilar().doClick();
+        Assert.assertEquals(saida, compilador.getTaMensagens().getText());
+    }
+
+    @Test
+    public void test11() {
+        String entrada = "bool consts def end execute false float get ifFalse ifTrue";
+
+        String saida = "linha   classe               lexema\n" +
+                       "1       palavra reservada    bool\n" +
+                       "1       palavra reservada    consts\n" +
+                       "1       palavra reservada    def\n" +
+                       "1       palavra reservada    end\n" +
+                       "1       palavra reservada    execute\n" +
+                       "1       palavra reservada    false\n" +
+                       "1       palavra reservada    float\n" +
+                       "1       palavra reservada    get\n" +
+                       "1       palavra reservada    ifFalse\n" +
+                       "1       palavra reservada    ifTrue\n" +
                        "\n" +
                        "programa compilado com sucesso";
 
@@ -241,5 +265,27 @@ public class LexicoTest {
         Assert.assertEquals(saida, compilador.getTaMensagens().getText());
     }
 
-    
+    @Test
+    public void test12() {
+        String entrada = "input int print println set str true types var whileFalse whileTrue";
+
+        String saida = "linha   classe               lexema\n" +
+                       "1       palavra reservada    input\n" +
+                       "1       palavra reservada    int\n" +
+                       "1       palavra reservada    print\n" +
+                       "1       palavra reservada    println\n" +
+                       "1       palavra reservada    set\n" +
+                       "1       palavra reservada    str\n" +
+                       "1       palavra reservada    true\n" +
+                       "1       palavra reservada    types\n" +
+                       "1       palavra reservada    var\n" +
+                       "1       palavra reservada    whileFalse\n"  +
+                       "1       palavra reservada    whileTrue\n" +
+                       "\n" +
+                       "programa compilado com sucesso";
+
+        compilador.getTaEditor().setText(entrada);
+        compilador.getJbCompilar().doClick();
+        Assert.assertEquals(saida, compilador.getTaMensagens().getText());
+    }
 }

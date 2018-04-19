@@ -44,6 +44,8 @@ public class Lexico implements Constants {
             case t_true:
             case t_types:
             case t_var:
+            case t_whileFalse:
+            case t_whileTrue:
                 return "palavra reservada";
                 
             case t_TOKEN_27:
