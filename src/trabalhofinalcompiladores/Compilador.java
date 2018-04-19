@@ -57,7 +57,7 @@ public class Compilador extends JFrame {
         adicionaActionPerformed(jbEquipe, KeyStroke.getKeyStroke("F1"));
 
         linhas = new ArrayList<>();
-        
+
         caminho = "";
         lbBarraStatus.setText(caminho);
     }
@@ -427,7 +427,7 @@ public class Compilador extends JFrame {
                     String linha = linhaTemp + defineSpace(linhaTemp.length(), 8);
                     String classe = lexicoTemp + defineSpace(lexicoTemp.length(), 21);
                     String lexema = t.getLexeme();
-                    
+
                     tokens += "\n" + linha + classe + lexema;
                     ehValido = true;
                 }
@@ -472,6 +472,31 @@ public class Compilador extends JFrame {
     }
     private void taEditorKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_taEditorKeyPressed
         lbBarraStatus.setText("" + caminho);
+
+        switch (evt.getKeyCode()) {
+            case KeyEvent.VK_F1:
+                jbEquipe.doClick();
+                break;
+
+            case KeyEvent.VK_F9:
+                jbCompilar.doClick();
+                break;
+        }
+        
+        if ((evt.getKeyCode() == KeyEvent.VK_N) && ((evt.getModifiers() & KeyEvent.CTRL_MASK) != 0)) {
+            jbNovo.doClick();
+        } else if ((evt.getKeyCode() == KeyEvent.VK_O) && ((evt.getModifiers() & KeyEvent.CTRL_MASK) != 0)) {
+            jbAbrir.doClick();
+        } else if ((evt.getKeyCode() == KeyEvent.VK_S) && ((evt.getModifiers() & KeyEvent.CTRL_MASK) != 0)) {
+            jbSalvar.doClick();
+        } else if ((evt.getKeyCode() == KeyEvent.VK_C) && ((evt.getModifiers() & KeyEvent.CTRL_MASK) != 0)) {
+            jbCopiar.doClick();
+        } else if ((evt.getKeyCode() == KeyEvent.VK_V) && ((evt.getModifiers() & KeyEvent.CTRL_MASK) != 0)) {
+            jbColar.doClick();
+        } else if ((evt.getKeyCode() == KeyEvent.VK_X) && ((evt.getModifiers() & KeyEvent.CTRL_MASK) != 0)) {
+            jbRecortar.doClick();
+        }
+
     }//GEN-LAST:event_taEditorKeyPressed
 
     public String defineSpace(int count, int maxLenght) {
