@@ -6,6 +6,7 @@ import trabalhofinalcompiladores.Comum.Utils.CompiladorConst;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -28,6 +29,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import trabalhofinalcompiladores.Comum.Lexico.Lexico;
@@ -248,9 +250,9 @@ public class Compilador extends JFrame {
         jspMensagens.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
         jspMensagens.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
+        taMensagens.setEditable(false);
         taMensagens.setColumns(20);
         taMensagens.setRows(5);
-        taMensagens.setEnabled(false);
         taMensagens.setMinimumSize(new java.awt.Dimension(750, 105));
         jspMensagens.setViewportView(taMensagens);
 
@@ -489,14 +491,7 @@ public class Compilador extends JFrame {
             jbAbrir.doClick();
         } else if ((evt.getKeyCode() == KeyEvent.VK_S) && ((evt.getModifiers() & KeyEvent.CTRL_MASK) != 0)) {
             jbSalvar.doClick();
-        } else if ((evt.getKeyCode() == KeyEvent.VK_C) && ((evt.getModifiers() & KeyEvent.CTRL_MASK) != 0)) {
-            jbCopiar.doClick();
-        } else if ((evt.getKeyCode() == KeyEvent.VK_V) && ((evt.getModifiers() & KeyEvent.CTRL_MASK) != 0)) {
-            jbColar.doClick();
-        } else if ((evt.getKeyCode() == KeyEvent.VK_X) && ((evt.getModifiers() & KeyEvent.CTRL_MASK) != 0)) {
-            jbRecortar.doClick();
         }
-
     }//GEN-LAST:event_taEditorKeyPressed
 
     public String defineSpace(int count, int maxLenght) {

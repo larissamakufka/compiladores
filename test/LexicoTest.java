@@ -288,4 +288,36 @@ public class LexicoTest {
         compilador.getJbCompilar().doClick();
         Assert.assertEquals(saida, compilador.getTaMensagens().getText());
     }
+
+    @Test
+    public void test13() {
+        String entrada = "int a := 10 /* isso é uma variavel maneira */\n"
+                + "double b /* isso é uma variavel outra maneira */\n"
+                + "\n"
+                + "b := 20\n"
+                + "\n"
+                + "c := a * b";
+
+        String saida = "linha   classe               lexema\n"
+                + "1       palavra reservada    int\n"
+                + "1       identificador        a\n"
+                + "1       símbolo especial     :=\n"
+                + "1       constante inteira    10\n"
+                + "2       identificador        double\n"
+                + "2       identificador        b\n"
+                + "4       identificador        b\n"
+                + "4       símbolo especial     :=\n"
+                + "4       constante inteira    20\n"
+                + "6       identificador        c\n"
+                + "6       símbolo especial     :=\n"
+                + "6       identificador        a\n"
+                + "6       símbolo especial     *\n"
+                + "6       identificador        b\n"
+                + "\n"
+                + "programa compilado com sucesso";
+
+        compilador.getTaEditor().setText(entrada);
+        compilador.getJbCompilar().doClick();
+        Assert.assertEquals(saida, compilador.getTaMensagens().getText());
+    }
 }
