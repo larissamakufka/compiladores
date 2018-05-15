@@ -1,11 +1,14 @@
 #Options
 GenerateScanner = true
-GenerateParser = false
+GenerateParser = true
 Language = Java
 ScannerName = Lexico
+ParserName = Sintatico
+SemanticName = Semantico
 ScannerCaseSensitive = true
 ScannerTable = Compact
-Input = String
+Input = Stream
+Parser = LL
 #RegularDefinitions
 letra: [a-z]|[A-Z]
 underline: _
@@ -69,3 +72,113 @@ whileTrue  = identificador : "whileTrue"
  : {comen_linha}
  : {comen_bloco}
  : {WS}*
+#NonTerminals
+<forma_geral>
+<forma_geral_vazio>
+<lista_comandos> 
+<lista_comandos_vazio>
+<comando>
+<comando1>
+<comando2>
+<comando3>
+<comando4>
+<definicao_tipos> 
+<definicao_tipo> 
+<lista_definicao_tipos_vazio> 
+<e_do_tipo> 
+<simples> 
+<composto>
+<lista_campos> 
+<campo> 
+<definicao_constantes> 
+<lista_id> 
+<identificadores> 
+<lista_identificadores> 
+<valor> 
+<const_logica> 
+<declaracao_variaveis> 
+<lista_variaveis> 
+<variaveis> 
+<tipo> 
+<atribuicao> 
+<tipos_compostos> 
+<entrada_dados> 
+<saida_dados> 
+<lista_expressoes> 
+<lis_exp> 
+<selecao> 
+<condicao>
+<repeticao>
+<expressao>
+<expressao1>
+<elemento>
+<relacional>
+<relacional1>
+<operador_relacional>
+<aritmetica>
+<aritmetica1>
+<termo>
+<termo1>
+<fator>
+<fator1>
+#Grammar
+<forma_geral> ::= def <forma_geral_vazio> execute <lista_comandos>;
+<forma_geral_vazio> ::= <definicao_tipos> <definicao_constantes> <declaracao_variaveis>;
+<lista_comandos> ::= <comando> <lista_comandos_vazio>;
+<lista_comandos_vazio> ::= <lista_comandos> | î;
+<comando> ::= <entrada_dados> | <saida_dados> | identificador <comando1> | "(" <expressao> ")" <comando2>;
+<comando1> ::= "=" <expressao> <comando1> | set "(" identificador "," <expressao> ")" <comando1>;
+
+
+
+
+<comando2> ::= ifFalse <condicao> | whileTrue ":" <condicao> | whileFalse ":" <condicao> | ifTrue <comando3>;
+<comando3> ::= ":" <lista_comandos> <comando4>;
+<comando4> ::= end | ifFalse ":" <lista_comandos> end;
+
+
+
+
+
+
+<definicao_tipos> ::= types <definicao_tipo> <lista_definicao_tipos_vazio> | î;
+<definicao_tipo> ::= identificador ":" <e_do_tipo>;
+<lista_definicao_tipos_vazio> ::= <definicao_tipo> <lista_definicao_tipos_vazio> | î;
+<e_do_tipo> ::= <simples> | <composto>;
+<simples> ::= int | float | str | bool;
+<composto> ::= "(" <lista_campos> ")" ;
+<lista_campos> ::= <campo> <lista_campos> | <campo>;
+<campo> ::= identificador ":" <simples>;
+<definicao_constantes> ::= consts <lista_id> | î;
+<lista_id> ::= <identificadores> "=" <valor> <lista_id> | <identificadores> "=" <valor> ;
+<identificadores> ::= identificador <lista_identificadores>;
+<lista_identificadores> ::= "," identificador <lista_identificadores> | î;
+<valor> ::= const_inteira | const_real | const_caracter | <const_logica>;
+<const_logica> ::= true | false;
+<declaracao_variaveis> ::= var <lista_variaveis> | î;
+<lista_variaveis> ::= <variaveis> <lista_variaveis> | <variaveis>;
+<variaveis> ::= <identificadores> ":" <tipo>;
+<tipo> ::= <simples> | identificador;
+<atribuicao> ::= identificador "=" <expressao>;
+<tipos_compostos> ::= identificador set "(" identificador "," <expressao> ")";
+<entrada_dados> ::= input "(" <identificadores> ")";
+<saida_dados> ::= print "(" <lista_expressoes> ")" | println "(" <lista_expressoes> ")";
+<lista_expressoes> ::= <expressao> <lis_exp>;
+<lis_exp> ::= "," <lista_expressoes> | î;
+<selecao> ::= "(" <expressao> ")" ifTrue <condicao> | "(" <expressao> ")" ifFalse <condicao> | "(" <expressao> ")" ifTrue ":" <lista_comandos> ifFalse ":" <lista_comandos> end;
+<condicao> ::= ":" <lista_comandos> end;
+<repeticao> ::= "(" <expressao> ")" whileTrue ":" <condicao> |  "(" <expressao> ")" whileFalse ":" <condicao>;
+
+
+<expressao> ::= <elemento> <expressao1>;
+<expressao1> ::= "&&" <elemento> <expressao1> | "||" <elemento> <expressao1> | î;
+<elemento> ::= <relacional> | true | false | "!" <elemento>;
+<relacional> ::= <aritmetica> <relacional1>;
+<relacional1> ::= <operador_relacional> <relacional1> | î;
+<operador_relacional> ::= "=" | "!=" | "<" | "<=" | ">" | ">=";
+<aritmetica> ::= <termo> <aritmetica1>;
+<aritmetica1> ::= "+" <termo> <aritmetica1> | "-" <termo> <aritmetica1> | î;
+<termo> ::= <fator> <termo1>;
+<termo1> ::= "*" <fator> | "/" <fator> | î;
+<fator> ::= const_inteira | const_real | const_caracter | "(" <expressao> ")" | "+" <fator> | "-" <fator> | identificador <fator1>;
+<fator1> ::= get "(" identificador ")" | î;
