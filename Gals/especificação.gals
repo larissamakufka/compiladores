@@ -89,15 +89,19 @@ whileTrue  = identificador : "whileTrue"
 <simples> 
 <composto>
 <lista_campos> 
+<lista_campos1>
+<lista_id2>
 <campo> 
 <definicao_constantes> 
 <lista_id> 
+<lista_id1>
 <identificadores> 
 <lista_identificadores> 
 <valor> 
 <const_logica> 
 <declaracao_variaveis> 
 <lista_variaveis> 
+<lista_variaveis1>
 <variaveis> 
 <tipo> 
 <atribuicao> 
@@ -107,8 +111,12 @@ whileTrue  = identificador : "whileTrue"
 <lista_expressoes> 
 <lis_exp> 
 <selecao> 
+<selecao1>
+<selecao2>
+<selecao3>
 <condicao>
 <repeticao>
+<repeticao1>
 <expressao>
 <expressao1>
 <elemento>
@@ -128,35 +136,29 @@ whileTrue  = identificador : "whileTrue"
 <lista_comandos_vazio> ::= <lista_comandos> | î;
 <comando> ::= <entrada_dados> | <saida_dados> | identificador <comando1> | "(" <expressao> ")" <comando2>;
 <comando1> ::= "=" <expressao> <comando1> | set "(" identificador "," <expressao> ")" <comando1>;
-
-
-
-
 <comando2> ::= ifFalse <condicao> | whileTrue ":" <condicao> | whileFalse ":" <condicao> | ifTrue <comando3>;
 <comando3> ::= ":" <lista_comandos> <comando4>;
 <comando4> ::= end | ifFalse ":" <lista_comandos> end;
-
-
-
-
-
-
 <definicao_tipos> ::= types <definicao_tipo> <lista_definicao_tipos_vazio> | î;
 <definicao_tipo> ::= identificador ":" <e_do_tipo>;
 <lista_definicao_tipos_vazio> ::= <definicao_tipo> <lista_definicao_tipos_vazio> | î;
 <e_do_tipo> ::= <simples> | <composto>;
 <simples> ::= int | float | str | bool;
 <composto> ::= "(" <lista_campos> ")" ;
-<lista_campos> ::= <campo> <lista_campos> | <campo>;
+<lista_campos> ::= <lista_campos> <lista_campos1>;
+<lista_campos1> ::= <lista_campos> | î;
 <campo> ::= identificador ":" <simples>;
 <definicao_constantes> ::= consts <lista_id> | î;
-<lista_id> ::= <identificadores> "=" <valor> <lista_id> | <identificadores> "=" <valor> ;
+<lista_id> ::= <identificadores> <lista_id1>;
+<lista_id1> ::= "=" <valor> <lista_id2>;
+<lista_id2> ::= <lista_id> | î;
 <identificadores> ::= identificador <lista_identificadores>;
 <lista_identificadores> ::= "," identificador <lista_identificadores> | î;
 <valor> ::= const_inteira | const_real | const_caracter | <const_logica>;
 <const_logica> ::= true | false;
 <declaracao_variaveis> ::= var <lista_variaveis> | î;
-<lista_variaveis> ::= <variaveis> <lista_variaveis> | <variaveis>;
+<lista_variaveis> ::= <variaveis> <lista_variaveis1>;
+<lista_variaveis1> ::= <lista_variaveis> | î;
 <variaveis> ::= <identificadores> ":" <tipo>;
 <tipo> ::= <simples> | identificador;
 <atribuicao> ::= identificador "=" <expressao>;
@@ -165,11 +167,13 @@ whileTrue  = identificador : "whileTrue"
 <saida_dados> ::= print "(" <lista_expressoes> ")" | println "(" <lista_expressoes> ")";
 <lista_expressoes> ::= <expressao> <lis_exp>;
 <lis_exp> ::= "," <lista_expressoes> | î;
-<selecao> ::= "(" <expressao> ")" ifTrue <condicao> | "(" <expressao> ")" ifFalse <condicao> | "(" <expressao> ")" ifTrue ":" <lista_comandos> ifFalse ":" <lista_comandos> end;
+<selecao> ::= "(" <expressao> ")" <selecao1>;
+<selecao1> ::= ifFalse <condicao> | ifTrue <selecao2>;
+<selecao2> ::= ":" <lista_comandos> <selecao3>;
+<selecao3> ::= end | ifFalse ":" <lista_comandos> end;
 <condicao> ::= ":" <lista_comandos> end;
-<repeticao> ::= "(" <expressao> ")" whileTrue ":" <condicao> |  "(" <expressao> ")" whileFalse ":" <condicao>;
-
-
+<repeticao> ::= "(" <expressao> ")" <repeticao1>;
+<repeticao1> ::= whileTrue ":" <condicao> | whileFalse ":" <condicao>;
 <expressao> ::= <elemento> <expressao1>;
 <expressao1> ::= "&&" <elemento> <expressao1> | "||" <elemento> <expressao1> | î;
 <elemento> ::= <relacional> | true | false | "!" <elemento>;
