@@ -32,6 +32,9 @@ import javax.swing.UIManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import trabalhofinalcompiladores.Lexico.Lexico;
 import trabalhofinalcompiladores.Comum.Token;
+import trabalhofinalcompiladores.Semantico.SemanticError;
+import trabalhofinalcompiladores.Semantico.Semantico;
+import trabalhofinalcompiladores.Sintatico.*;
 
 public class Compilador extends JFrame {
 
@@ -412,6 +415,8 @@ public class Compilador extends JFrame {
 
     private void jbCompilarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbCompilarActionPerformed
         Lexico lexico = new Lexico();
+        Sintatico sintatico = new Sintatico();
+        Semantico semantico = new Semantico();
         try {
             lexico.setInput(taEditor.getText());
             taMensagens.setText("");
@@ -433,18 +438,25 @@ public class Compilador extends JFrame {
                 }
             }
             if (ehValido) {
+                lexico.setInput(taEditor.getText());
+                sintatico.parse(lexico, semantico);
                 taMensagens.setText(tokens + "\n\nprograma compilado com sucesso");
             } else {
                 taMensagens.setText("nenhum programa para compilar");
             }
-        } catch (LexicalError e) {
+        } catch (LexicalError lexicalError) {
             String erro = "Erro na linha " + lexico.getLinha(linhas) + " - ";
-            if (e.getMessage().equals("símbolo inválido")) {
-                erro += lexico.getInput() + " " + e.getMessage();
+            if (lexicalError.getMessage().equals("símbolo inválido")) {
+                erro += lexico.getInput() + " " + lexicalError.getMessage();
             } else {
-                erro += e.getMessage();
+                erro += lexicalError.getMessage();
             }
             taMensagens.setText(erro);
+        } catch (SyntaticError syntaticError) {
+            String erro = "Erro na linha " + lexico.getLinha(linhas) + " - encontrado " ;
+            taMensagens.setText(erro);
+        } catch (SemanticError semanticError) {
+            // Logger.getLogger(Compilador.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jbCompilarActionPerformed
 
