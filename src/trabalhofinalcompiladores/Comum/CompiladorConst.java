@@ -1,4 +1,4 @@
-package trabalhofinalcompiladores.Comum.Utils;
+package trabalhofinalcompiladores.Comum;
 
 import java.awt.Color;
 import java.awt.Dimension;

@@ -1,4 +1,6 @@
-package trabalhofinalcompiladores.Comum.Lexico;
+package trabalhofinalcompiladores.Lexico;
+
+import trabalhofinalcompiladores.Comum.AnalysisError;
 
 public class LexicalError extends AnalysisError
 {

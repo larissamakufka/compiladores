@@ -1,12 +1,11 @@
 package trabalhofinalcompiladores;
 
-import trabalhofinalcompiladores.Comum.Lexico.LexicalError;
+import trabalhofinalcompiladores.Lexico.LexicalError;
 import java.awt.Label;
-import trabalhofinalcompiladores.Comum.Utils.CompiladorConst;
+import trabalhofinalcompiladores.Comum.CompiladorConst;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -29,11 +28,10 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
-import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import trabalhofinalcompiladores.Comum.Lexico.Lexico;
-import trabalhofinalcompiladores.Comum.Lexico.Token;
+import trabalhofinalcompiladores.Lexico.Lexico;
+import trabalhofinalcompiladores.Comum.Token;
 
 public class Compilador extends JFrame {
 

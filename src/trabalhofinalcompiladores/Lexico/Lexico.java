@@ -1,6 +1,9 @@
-package trabalhofinalcompiladores.Comum.Lexico;
+package trabalhofinalcompiladores.Lexico;
 
 import java.util.List;
+import trabalhofinalcompiladores.Comum.Constants;
+import static trabalhofinalcompiladores.Comum.ScannerConstants.*;
+import trabalhofinalcompiladores.Comum.Token;
 
 public class Lexico implements Constants {
 
@@ -15,16 +18,16 @@ public class Lexico implements Constants {
         switch (id) {
             case t_identificador:
                 return "identificador";
-                
+
             case t_const_inteira:
                 return "constante inteira";
-                
+
             case t_const_real:
                 return "constante real";
-                
+
             case t_const_caracter:
                 return "constante caracter";
-                
+
             case t_bool:
             case t_consts:
             case t_def:
@@ -47,7 +50,7 @@ public class Lexico implements Constants {
             case t_whileFalse:
             case t_whileTrue:
                 return "palavra reservada";
-                
+
             case t_TOKEN_27:
             case t_TOKEN_28:
             case t_TOKEN_29:

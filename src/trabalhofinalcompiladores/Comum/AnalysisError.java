@@ -1,4 +1,4 @@
-package trabalhofinalcompiladores.Comum.Lexico;
+package trabalhofinalcompiladores.Comum;
 
 public class AnalysisError extends Exception
 {
