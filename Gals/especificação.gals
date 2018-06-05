@@ -78,6 +78,7 @@ whileTrue  = identificador : "whileTrue"
 <lista_comandos> 
 <lista_comandos_vazio> 
 <comando> 
+<comando1>
 <comando2> 
 <comando3> 
 <comando4> 
@@ -125,8 +126,9 @@ whileTrue  = identificador : "whileTrue"
 <forma_geral_vazio> ::= <definicao_tipos> <definicao_constantes> <declaracao_variaveis>;
 <lista_comandos> ::= <comando> <lista_comandos_vazio>;
 <lista_comandos_vazio> ::= <lista_comandos> | î;
-<comando> ::= <entrada_dados> | <saida_dados> | "(" <expressao> ")" <comando2>;
-<comando2> ::= ifFalse <condicao> | whileTrue ":" <condicao> | whileFalse ":" <condicao> | ifTrue <comando3>;
+<comando> ::= <entrada_dados> | <saida_dados> | "(" <expressao> ")" <comando2> | identificador <comando1>;
+<comando1> ::= ":=" <expressao> | set "(" identificador "," <expressao> ")";
+<comando2> ::= ifFalse <condicao> | whileTrue <condicao> | whileFalse <condicao> | ifTrue <comando3>;
 <comando3> ::= ":" <lista_comandos> <comando4>;
 <comando4> ::= end | ifFalse ":" <lista_comandos> end;
 <definicao_tipos> ::= types <definicao_tipo> <lista_definicao_tipos_vazio> | î;
@@ -139,7 +141,7 @@ whileTrue  = identificador : "whileTrue"
 <lista_campos1> ::= <lista_campos> | î;
 <campo> ::= identificador ":" <simples>;
 <definicao_constantes> ::= consts <lista_id> | î;
-<lista_id> ::= <identificadores> <lista_id1>;
+<lista_id> ::= <identificadores> "=" <valor> <lista_id2>;
 <lista_id1> ::= "=" <valor> <lista_id2>;
 <lista_id2> ::= <lista_id> | î;
 <identificadores> ::= identificador <lista_identificadores>;
@@ -160,11 +162,11 @@ whileTrue  = identificador : "whileTrue"
 <expressao1> ::= "&&" <elemento> <expressao1> | "||" <elemento> <expressao1> | î;
 <elemento> ::= <relacional> | true | false | "!" <elemento>;
 <relacional> ::= <aritmetica> <relacional1>;
-<relacional1> ::= <operador_relacional> <relacional1> | î;
+<relacional1> ::= <operador_relacional> <aritmetica> | î;
 <operador_relacional> ::= "=" | "!=" | "<" | "<=" | ">" | ">=";
 <aritmetica> ::= <termo> <aritmetica1>;
 <aritmetica1> ::= "+" <termo> <aritmetica1> | "-" <termo> <aritmetica1> | î;
 <termo> ::= <fator> <termo1>;
-<termo1> ::= "*" <fator> | "/" <fator> | î;
+<termo1> ::= "*" <fator> <termo1> | "/" <fator> <termo1> | î;
 <fator> ::= const_inteira | const_real | const_caracter | "(" <expressao> ")" | "+" <fator> | "-" <fator> | identificador <fator1>;
 <fator1> ::= get "(" identificador ")" | î;
