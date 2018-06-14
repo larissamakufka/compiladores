@@ -441,6 +441,7 @@ public class Compilador extends JFrame {
                 lexico.setInput(taEditor.getText());
                 sintatico.parse(lexico, semantico);
                 taMensagens.setText(tokens + "\n\nprograma compilado com sucesso");
+                taMensagens.setText(/*tokens + "\n\n*/ "programa compilado com sucesso");
             } else {
                 taMensagens.setText("nenhum programa para compilar");
             }
@@ -453,7 +454,7 @@ public class Compilador extends JFrame {
             }
             taMensagens.setText(erro);
         } catch (SyntaticError syntaticError) {
-            String erro = "Erro na linha " + lexico.getLinha(linhas) + " - encontrado " ;
+            String erro = "Erro na linha " + lexico.getLinha(linhas) + " - encontrado " + sintatico.getTokenEncontrado().getLexeme() + " " + syntaticError.getMessage();
             taMensagens.setText(erro);
         } catch (SemanticError semanticError) {
             // Logger.getLogger(Compilador.class.getName()).log(Level.SEVERE, null, ex);

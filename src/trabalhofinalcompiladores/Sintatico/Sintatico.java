@@ -94,4 +94,9 @@ public class Sintatico implements Constants {
         while (!step())
             ;
     }
+    
+    public Token getTokenEncontrado()
+    {
+        return this.currentToken;
+    }
 }
