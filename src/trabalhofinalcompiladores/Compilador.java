@@ -440,7 +440,6 @@ public class Compilador extends JFrame {
             if (ehValido) {
                 lexico.setInput(taEditor.getText());
                 sintatico.parse(lexico, semantico);
-                taMensagens.setText(tokens + "\n\nprograma compilado com sucesso");
                 taMensagens.setText(/*tokens + "\n\n*/ "programa compilado com sucesso");
             } else {
                 taMensagens.setText("nenhum programa para compilar");
