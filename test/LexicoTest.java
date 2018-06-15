@@ -80,7 +80,7 @@ public class LexicoTest {
     public void test4() {
         String entrada = "|$";
 
-        String saida = "Erro na linha 1 - |$ símbolo inválido";
+        String saida = "Erro na linha 1 - | símbolo inválido";
 
         compilador.getTaEditor().setText(entrada);
         compilador.getJbCompilar().doClick();
@@ -128,22 +128,7 @@ public class LexicoTest {
                 + "int x = 10 * 5 \n"
                 + "end";
 
-        String saida = "linha   classe               lexema\n"
-                + "3       palavra reservada    bool\n"
-                + "3       identificador        teste\n"
-                + "3       símbolo especial     =\n"
-                + "3       palavra reservada    true\n"
-                + "4       identificador        if\n"
-                + "4       identificador        teste\n"
-                + "5       palavra reservada    int\n"
-                + "5       identificador        x\n"
-                + "5       símbolo especial     =\n"
-                + "5       constante inteira    10\n"
-                + "5       símbolo especial     *\n"
-                + "5       constante inteira    5\n"
-                + "6       palavra reservada    end\n"
-                + "\n"
-                + "programa compilado com sucesso";
+        String saida = "programa compilado com sucesso";
 
         compilador.getTaEditor().setText(entrada);
         compilador.getJbCompilar().doClick();

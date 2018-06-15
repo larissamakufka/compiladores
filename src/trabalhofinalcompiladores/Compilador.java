@@ -59,8 +59,6 @@ public class Compilador extends JFrame {
         adicionaActionPerformed(jbCompilar, KeyStroke.getKeyStroke("F9"));
         adicionaActionPerformed(jbEquipe, KeyStroke.getKeyStroke("F1"));
 
-        linhas = new ArrayList<>();
-
         caminho = "";
         lbBarraStatus.setText(caminho);
     }
@@ -524,6 +522,7 @@ public class Compilador extends JFrame {
     }
 
     private void loadLines(String input) {
+        linhas = new ArrayList<>();
         char[] chars = input.toCharArray();
         for (int i = 0; i < chars.length; i++) {
             if (chars[i] == '\n') {
