@@ -80,7 +80,7 @@ public class LexicoTest {
     public void test4() {
         String entrada = "|$";
 
-        String saida = "Erro na linha 1 - | símbolo inválido";
+        String saida = "Erro na linha 1 - |$ símbolo inválido";
 
         compilador.getTaEditor().setText(entrada);
         compilador.getJbCompilar().doClick();
