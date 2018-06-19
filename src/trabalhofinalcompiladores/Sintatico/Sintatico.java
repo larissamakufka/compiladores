@@ -81,6 +81,7 @@ public class Sintatico implements Constants {
         }
     }
 
+    @SuppressWarnings("empty-statement")
     public void parse(Lexico scanner, Semantico semanticAnalyser) throws LexicalError, SyntaticError, SemanticError {
         this.scanner = scanner;
         this.semanticAnalyser = semanticAnalyser;
@@ -91,12 +92,27 @@ public class Sintatico implements Constants {
 
         currentToken = scanner.nextToken();
 
-        while (!step())
-            ;
+        while (!step());
     }
     
-    public Token getTokenEncontrado()
+    public String getEncontrado()
     {
-        return this.currentToken;
+        switch(this.currentToken.getId())
+        {
+            case DOLLAR:
+            {
+                return "fim de programa";
+            }            
+            case t_const_inteira:
+            case t_const_caracter:
+            case t_const_real:
+            {
+                return this.scanner.getNomeClasse(this.currentToken.getId());
+            }
+            default:
+            {
+                return this.currentToken.getLexeme();
+            }
+        }
     }
 }

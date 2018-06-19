@@ -451,7 +451,7 @@ public class Compilador extends JFrame {
             }
             taMensagens.setText(erro);
         } catch (SyntaticError syntaticError) {
-            String erro = "Erro na linha " + lexico.getLinha(linhas) + " - encontrado " + sintatico.getTokenEncontrado().getLexeme() + " " + syntaticError.getMessage();
+            String erro = "Erro na linha " + lexico.getLinha(linhas) + " - encontrado " + sintatico.getEncontrado() + " " + syntaticError.getMessage();
             taMensagens.setText(erro);
         } catch (SemanticError semanticError) {
             // Logger.getLogger(Compilador.class.getName()).log(Level.SEVERE, null, ex);
