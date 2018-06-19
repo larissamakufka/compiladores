@@ -122,7 +122,7 @@ whileTrue  = identificador : "whileTrue"
 <fator> 
 <fator1>
 #Grammar
-<forma_geral> ::= def <forma_geral_vazio> execute <lista_comandos>;
+<forma_geral> ::= #15 def <forma_geral_vazio> execute <lista_comandos> #16;
 <forma_geral_vazio> ::= <definicao_tipos> <definicao_constantes> <declaracao_variaveis>;
 <lista_comandos> ::= <comando> <lista_comandos_vazio>;
 <lista_comandos_vazio> ::= <lista_comandos> | î;
@@ -142,7 +142,6 @@ whileTrue  = identificador : "whileTrue"
 <campo> ::= identificador ":" <simples>;
 <definicao_constantes> ::= consts <lista_id> | î;
 <lista_id> ::= <identificadores> "=" <valor> <lista_id2>;
-<lista_id1> ::= "=" <valor> <lista_id2>;
 <lista_id2> ::= <lista_id> | î;
 <identificadores> ::= identificador <lista_identificadores>;
 <lista_identificadores> ::= "," identificador <lista_identificadores> | î;
@@ -154,19 +153,19 @@ whileTrue  = identificador : "whileTrue"
 <variaveis> ::= <identificadores> ":" <tipo>;
 <tipo> ::= <simples> | identificador;
 <entrada_dados> ::= input "(" <identificadores> ")";
-<saida_dados> ::= print "(" <lista_expressoes> ")" | println "(" <lista_expressoes> ")";
-<lista_expressoes> ::= <expressao> <lis_exp>;
+<saida_dados> ::= print "(" <lista_expressoes> ")" | println "(" <lista_expressoes> ")" #17;
+<lista_expressoes> ::= <expressao> #14 <lis_exp>;
 <lis_exp> ::= "," <lista_expressoes> | î;
 <condicao> ::= ":" <lista_comandos> end;
 <expressao> ::= <elemento> <expressao1>;
-<expressao1> ::= "&&" <elemento> <expressao1> | "||" <elemento> <expressao1> | î;
-<elemento> ::= <relacional> | true | false | "!" <elemento>;
+<expressao1> ::= "&&" <elemento> #18 <expressao1> | "||" <elemento> #19 <expressao1> | î;
+<elemento> ::= <relacional> | true #11 | false #12 | "!" <elemento> #13;
 <relacional> ::= <aritmetica> <relacional1>;
-<relacional1> ::= <operador_relacional> <aritmetica> | î;
+<relacional1> ::= <operador_relacional> #9 <aritmetica> #10 | î;
 <operador_relacional> ::= "=" | "!=" | "<" | "<=" | ">" | ">=";
 <aritmetica> ::= <termo> <aritmetica1>;
-<aritmetica1> ::= "+" <termo> <aritmetica1> | "-" <termo> <aritmetica1> | î;
+<aritmetica1> ::= "+" <termo> #1 <aritmetica1> | "-" <termo> #2 <aritmetica1> | î;
 <termo> ::= <fator> <termo1>;
-<termo1> ::= "*" <fator> <termo1> | "/" <fator> <termo1> | î;
-<fator> ::= const_inteira | const_real | const_caracter | "(" <expressao> ")" | "+" <fator> | "-" <fator> | identificador <fator1>;
+<termo1> ::= "*" <fator> <termo1> #3 | "/" <fator> #4 <termo1> | î;
+<fator> ::= const_inteira #5 | const_real #6 | const_caracter #20 | "(" <expressao> ")" | "+" <fator> #7 | "-" <fator> #8 | identificador <fator1>;
 <fator1> ::= get "(" identificador ")" | î;
