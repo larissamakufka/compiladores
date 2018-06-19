@@ -37,15 +37,7 @@ public class LexicoTest {
                 + "print i_area =\n\n"
                 + "\"valor\" 01,0";
 
-        String saida = "linha   classe               lexema\n"
-                + "3       palavra reservada    print\n"
-                + "3       identificador        i_area\n"
-                + "3       símbolo especial     =\n"
-                + "5       constante caracter   \"valor\"\n"
-                + "5       constante inteira    0\n"
-                + "5       constante real       1,0\n"
-                + "\n"
-                + "programa compilado com sucesso";
+        String saida = "Erro na linha 3 - encontrado print esperado def";
 
         compilador.getTaEditor().setText(entrada);
         compilador.getJbCompilar().doClick();

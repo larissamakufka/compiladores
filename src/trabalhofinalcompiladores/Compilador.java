@@ -415,6 +415,7 @@ public class Compilador extends JFrame {
         Lexico lexico = new Lexico();
         Sintatico sintatico = new Sintatico();
         Semantico semantico = new Semantico();
+        int position = 0;
         try {
             lexico.setInput(taEditor.getText());
             taMensagens.setText("");
@@ -424,7 +425,8 @@ public class Compilador extends JFrame {
             String tokens = "linha   classe               lexema";
             while ((t = lexico.nextToken()) != null) {
                 if (!"".equals(lexico.getNomeClasse(t.getId()))) {
-                    String linhaTemp = String.valueOf(getLine(linhas, t.getPosition()));
+                    position = t.getPosition();
+                    String linhaTemp = String.valueOf(lexico.getLinha(linhas, position));
                     String lexicoTemp = lexico.getNomeClasse(t.getId());
 
                     String linha = linhaTemp + defineSpace(linhaTemp.length(), 8);
@@ -436,14 +438,13 @@ public class Compilador extends JFrame {
                 }
             }
             if (ehValido) {
-                lexico.setInput(taEditor.getText());
                 sintatico.parse(lexico, semantico);
                 taMensagens.setText(/*tokens + "\n\n*/ "programa compilado com sucesso");
             } else {
                 taMensagens.setText("nenhum programa para compilar");
             }
         } catch (LexicalError lexicalError) {
-            String erro = "Erro na linha " + lexico.getLinha(linhas) + " - ";
+            String erro = "Erro na linha " + lexico.getLinha(linhas, lexicalError.getPosition()) + " - ";
             if (lexicalError.getMessage().equals("símbolo inválido")) {
                 erro += lexico.getInput() + " " + lexicalError.getMessage();
             } else {
@@ -451,7 +452,7 @@ public class Compilador extends JFrame {
             }
             taMensagens.setText(erro);
         } catch (SyntaticError syntaticError) {
-            String erro = "Erro na linha " + lexico.getLinha(linhas) + " - encontrado " + sintatico.getEncontrado() + " " + syntaticError.getMessage();
+            String erro = "Erro na linha " + lexico.getLinha(linhas, syntaticError.getPosition()) + " - encontrado " + sintatico.getEncontrado() + " " + syntaticError.getMessage();
             taMensagens.setText(erro);
         } catch (SemanticError semanticError) {
             // Logger.getLogger(Compilador.class.getName()).log(Level.SEVERE, null, ex);
@@ -508,17 +509,6 @@ public class Compilador extends JFrame {
             space += " ";
         }
         return space;
-    }
-
-    private static int getLine(List<Integer> linesPosition, int position) {
-        int line = 1;
-        for (Integer linePosition : linesPosition) {
-            if (position <= linePosition) {
-                return line;
-            }
-            line++;
-        }
-        return 0;
     }
 
     private void loadLines(String input) {

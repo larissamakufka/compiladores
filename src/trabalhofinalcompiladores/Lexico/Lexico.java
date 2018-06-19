@@ -194,13 +194,13 @@ public class Lexico implements Constants {
         }
     }
 
-    public int getLinha(List<Integer> linhas) {
-        int linha = 1;
-        for (Integer l : linhas) {
-            if (position <= l) {
+    public int getLinha(List<Integer> linhas, int posicao) {
+        int linha = 0;
+        for (int i = 0; i < linhas.size(); i++) {
+        linha++;
+            if (posicao <= linhas.get(i)) {
                 return linha;
             }
-            linha++;
         }
         return linha;
     }
