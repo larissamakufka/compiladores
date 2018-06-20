@@ -41,6 +41,7 @@ public class Compilador extends JFrame {
     private String caminho;
     private File nomeArquivo;
     private List<Integer> linhas;
+    private String token;
 
     public Compilador() {
         initComponents();
@@ -422,7 +423,7 @@ public class Compilador extends JFrame {
             loadLines(taEditor.getText());
             boolean ehValido = false;
             Token t;
-            String tokens = "linha   classe               lexema";
+            this.token = "linha   classe               lexema";
             while ((t = lexico.nextToken()) != null) {
                 if (!"".equals(lexico.getNomeClasse(t.getId()))) {
                     position = t.getPosition();
@@ -433,11 +434,12 @@ public class Compilador extends JFrame {
                     String classe = lexicoTemp + defineSpace(lexicoTemp.length(), 21);
                     String lexema = t.getLexeme();
 
-                    tokens += "\n" + linha + classe + lexema;
+                    this.token += "\n" + linha + classe + lexema;
                     ehValido = true;
                 }
             }
             if (ehValido) {
+                lexico.setInput(taEditor.getText());
                 sintatico.parse(lexico, semantico);
                 taMensagens.setText(/*tokens + "\n\n*/ "programa compilado com sucesso");
             } else {
@@ -680,6 +682,14 @@ public class Compilador extends JFrame {
 
     public void setTaMensagens(JTextArea taMensagens) {
         this.taMensagens = taMensagens;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
 }

@@ -120,11 +120,24 @@ public class LexicoTest {
                 + "int x = 10 * 5 \n"
                 + "end";
 
-        String saida = "programa compilado com sucesso";
+        String saida = "linha   classe               lexema\n"
+                + "3       palavra reservada    bool\n"
+                + "3       identificador        teste\n"
+                + "3       símbolo especial     =\n"
+                + "3       palavra reservada    true\n"
+                + "4       identificador        if\n"
+                + "4       identificador        teste\n"
+                + "5       palavra reservada    int\n"
+                + "5       identificador        x\n"
+                + "5       símbolo especial     =\n"
+                + "5       constante inteira    10\n"
+                + "5       símbolo especial     *\n"
+                + "5       constante inteira    5\n"
+                + "6       palavra reservada    end";
 
         compilador.getTaEditor().setText(entrada);
         compilador.getJbCompilar().doClick();
-        Assert.assertEquals(saida, compilador.getTaMensagens().getText());
+        Assert.assertEquals(saida, compilador.getToken());
     }
 
     @Test
@@ -171,13 +184,11 @@ public class LexicoTest {
                 + "3       símbolo especial     *\n"
                 + "3       constante inteira    100\n"
                 + "3       símbolo especial     )\n"
-                + "3       símbolo especial     )\n"
-                + "\n"
-                + "programa compilado com sucesso";
+                + "3       símbolo especial     )";
 
         compilador.getTaEditor().setText(entrada);
         compilador.getJbCompilar().doClick();
-        Assert.assertEquals(saida, compilador.getTaMensagens().getText());
+        Assert.assertEquals(saida, compilador.getToken());
     }
 
     @Test
@@ -210,13 +221,11 @@ public class LexicoTest {
                 + "9       palavra reservada    whileFalse\n"
                 + "10      identificador        teste\n"
                 + "10      símbolo especial     :=\n"
-                + "10      identificador        L21\n"
-                + "\n"
-                + "programa compilado com sucesso";
+                + "10      identificador        L21";
 
         compilador.getTaEditor().setText(entrada);
         compilador.getJbCompilar().doClick();
-        Assert.assertEquals(saida, compilador.getTaMensagens().getText());
+        Assert.assertEquals(saida, compilador.getToken());
     }
 
     @Test
@@ -233,13 +242,11 @@ public class LexicoTest {
                 + "1       palavra reservada    float\n"
                 + "1       palavra reservada    get\n"
                 + "1       palavra reservada    ifFalse\n"
-                + "1       palavra reservada    ifTrue\n"
-                + "\n"
-                + "programa compilado com sucesso";
+                + "1       palavra reservada    ifTrue";
 
         compilador.getTaEditor().setText(entrada);
         compilador.getJbCompilar().doClick();
-        Assert.assertEquals(saida, compilador.getTaMensagens().getText());
+        Assert.assertEquals(saida, compilador.getToken());
     }
 
     @Test
@@ -257,13 +264,11 @@ public class LexicoTest {
                 + "1       palavra reservada    types\n"
                 + "1       palavra reservada    var\n"
                 + "1       palavra reservada    whileFalse\n"
-                + "1       palavra reservada    whileTrue\n"
-                + "\n"
-                + "programa compilado com sucesso";
+                + "1       palavra reservada    whileTrue";
 
         compilador.getTaEditor().setText(entrada);
         compilador.getJbCompilar().doClick();
-        Assert.assertEquals(saida, compilador.getTaMensagens().getText());
+        Assert.assertEquals(saida, compilador.getToken());
     }
 
     @Test
@@ -289,12 +294,10 @@ public class LexicoTest {
                 + "6       símbolo especial     :=\n"
                 + "6       identificador        a\n"
                 + "6       símbolo especial     *\n"
-                + "6       identificador        b\n"
-                + "\n"
-                + "programa compilado com sucesso";
+                + "6       identificador        b";
 
         compilador.getTaEditor().setText(entrada);
         compilador.getJbCompilar().doClick();
-        Assert.assertEquals(saida, compilador.getTaMensagens().getText());
+        Assert.assertEquals(saida, compilador.getToken());
     }
 }
