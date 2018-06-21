@@ -416,18 +416,17 @@ public class Compilador extends JFrame {
         Lexico lexico = new Lexico();
         Sintatico sintatico = new Sintatico();
         Semantico semantico = new Semantico();
-        int position = 0;
+        Token t;
         try {
             lexico.setInput(taEditor.getText());
             taMensagens.setText("");
             loadLines(taEditor.getText());
             boolean ehValido = false;
-            Token t;
             this.token = "linha   classe               lexema";
+            // Deixar este while do jeito que está porque nos testes unitários é utilizada a variável "t" para verificação dos tokens
             while ((t = lexico.nextToken()) != null) {
                 if (!"".equals(lexico.getNomeClasse(t.getId()))) {
-                    position = t.getPosition();
-                    String linhaTemp = String.valueOf(lexico.getLinha(linhas, position));
+                    String linhaTemp = String.valueOf(lexico.getLinha(linhas, t.getPosition()));
                     String lexicoTemp = lexico.getNomeClasse(t.getId());
 
                     String linha = linhaTemp + defineSpace(linhaTemp.length(), 8);
@@ -441,14 +440,14 @@ public class Compilador extends JFrame {
             if (ehValido) {
                 lexico.setInput(taEditor.getText());
                 sintatico.parse(lexico, semantico);
-                taMensagens.setText(/*tokens + "\n\n*/ "programa compilado com sucesso");
+                taMensagens.setText("programa compilado com sucesso");
             } else {
                 taMensagens.setText("nenhum programa para compilar");
             }
         } catch (LexicalError lexicalError) {
             String erro = "Erro na linha " + lexico.getLinha(linhas, lexicalError.getPosition()) + " - ";
             if (lexicalError.getMessage().equals("símbolo inválido")) {
-                erro += lexico.getInput() + " " + lexicalError.getMessage();
+                erro += lexico.getActualToken() + " " + lexicalError.getMessage();
             } else {
                 erro += lexicalError.getMessage();
             }

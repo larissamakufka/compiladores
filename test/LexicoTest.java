@@ -300,4 +300,15 @@ public class LexicoTest {
         compilador.getJbCompilar().doClick();
         Assert.assertEquals(saida, compilador.getToken());
     }
+
+    @Test
+    public void test14() {
+        String entrada = "&símboloErrado";
+
+        String saida = "Erro na linha 1 - &a símbolo inválido";
+
+        compilador.getTaEditor().setText(entrada);
+        compilador.getJbCompilar().doClick();
+        Assert.assertEquals(saida, compilador.getTaMensagens().getText());
+    }
 }

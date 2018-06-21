@@ -9,6 +9,8 @@ public class Lexico implements Constants {
 
     private int position;
     private String input;
+    private char nextChar;
+    private String actualToken;
 
     public Lexico() {
         this("");
@@ -95,6 +97,7 @@ public class Lexico implements Constants {
         if (!hasInput()) {
             return null;
         }
+        setNextChar(' ');
 
         int start = position;
 
@@ -102,22 +105,25 @@ public class Lexico implements Constants {
         int lastState = 0;
         int endState = -1;
         int end = -1;
+        char nChar = ' ';
 
         while (hasInput()) {
             lastState = state;
-            state = nextState(nextChar(), state);
+            nChar = nextChar();
+            state = nextState(nChar, state);
 
             if (state < 0) {
                 break;
-            } else {
-                if (tokenForState(state) >= 0) {
-                    endState = state;
-                    end = position;
-                }
+            } else if (tokenForState(state) >= 0) {
+                endState = state;
+                end = position;
             }
         }
+        
         if (endState < 0 || (endState != state && tokenForState(lastState) == -2)) {
             throw new LexicalError(SCANNER_ERROR[lastState], start);
+        } else {
+            setNextChar(nChar);
         }
 
         position = end;
@@ -197,11 +203,27 @@ public class Lexico implements Constants {
     public int getLinha(List<Integer> linhas, int posicao) {
         int linha = 0;
         for (int i = 0; i < linhas.size(); i++) {
-        linha++;
+            linha++;
             if (posicao <= linhas.get(i)) {
                 return linha;
             }
         }
         return linha;
+    }
+
+    public char getNextChar() {
+        return nextChar;
+    }
+
+    public void setNextChar(char nextChar) {
+        if (nextChar != ' ') {
+            actualToken += nextChar;
+        } else {
+            actualToken = "";
+        }
+    }
+
+    public String getActualToken() {
+        return actualToken;
     }
 }
