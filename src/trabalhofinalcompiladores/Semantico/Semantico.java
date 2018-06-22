@@ -7,28 +7,103 @@ import trabalhofinalcompiladores.Comum.Token;
 public class Semantico implements Constants {
 
     private String operador;
-    private StringBuilder codigo;
-    private Stack<String> pilhaTipos;
+    private StringBuilder codigo = new StringBuilder();
+    private Stack<String> pilhaTipos = new Stack<String>();
     
     public void executeAction(int action, Token token) throws SemanticError {
         switch(action)
         {
-            case 1: this.Acao_1();
-            case 2: this.Acao_2();
-            case 3: this.Acao_3();
-            case 4: this.Acao_4(token);
-            case 5: this.Acao_5(token);
-            case 6: this.Acao_6(token);
-            case 7: this.Acao_7(token);
-            case 8: this.Acao_8(token);
-            case 9: this.Acao_9(token);
-            case 10: this.Acao_10(token);
-            case 11: this.Acao_11();
-            case 12: this.Acao_12();
-            case 13: this.Acao_13(token);
-            case 14: this.Acao_14();
-            case 15: this.Acao_15();
-            case 16: this.Acao_16();            
+            case 1: 
+            {
+                this.Acao_1();
+                break;
+            }
+            case 2: 
+            {
+                this.Acao_2();
+                break;
+            }
+            case 3: 
+            {
+                this.Acao_3();
+                break;
+            }
+            case 4: 
+            {
+                this.Acao_4(token);
+                break;
+            }
+            case 5: 
+            {
+                this.Acao_5(token);
+                break;
+            }
+            case 6: 
+            {
+                this.Acao_6(token);
+                break;
+            }
+            case 7: 
+            {
+                this.Acao_7(token);
+                break;
+            }
+            case 8: 
+            {
+                this.Acao_8(token);
+                break;
+            }
+            case 9: 
+            {
+                this.Acao_9(token);
+                break;
+            }
+            case 10: 
+            {
+                this.Acao_10(token);
+                break;
+            }
+            case 11: 
+            {
+                this.Acao_11();
+                break;
+            }
+            case 12: 
+            {
+                this.Acao_12();
+                break;
+            }
+            case 13: 
+            {
+                this.Acao_13(token);
+                break;
+            }
+            case 14: 
+            {
+                this.Acao_14();
+                break;
+            }
+            case 15: 
+            {
+                this.Acao_15();
+                break;
+            }
+            case 16: 
+            {
+                this.Acao_16();            
+                break;
+            }
+            case 17:
+            {
+                this.Acao_17();
+                break;
+            }
+            case 20:
+            {
+                this.Acao_20(token);
+                break;
+            }
+
             default: throw new SemanticError("Ação semântica não reconhecida #" + action, token.getPosition());
         }
     }
@@ -111,7 +186,7 @@ public class Semantico implements Constants {
     public void Acao_6(Token token)
     {
         this.pilhaTipos.push("float64");
-        this.codigo.append("ldc.r8" + token.getLexeme() + "\n");
+        this.codigo.append("ldc.r8 " + token.getLexeme() + "\n");
     }
     
     public void Acao_7(Token token) throws SemanticError
@@ -215,7 +290,7 @@ public class Semantico implements Constants {
         this.codigo.append(
             ".assembly extern mscorlib {} \n" +
             ".assembly _codigo_objeto{} \n" +
-            ".module _codigo_objeto.exe \n" +
+            ".module _codigo_objeto.exe \n\n" +
             ".class public _UNICA{ \n" +
             ".method static public void _principal() { \n" +
             ".entrypoint \n"
@@ -229,5 +304,19 @@ public class Semantico implements Constants {
             "} \n" +
          "}" 
         );
+    }
+    
+    public void Acao_17()
+    {
+        String quebraLinha = "\n";
+        
+        this.codigo.append("ldstr " + quebraLinha);
+        this.codigo.append("call void [mscorlib]System.Console::Write(string) \n");
+    }
+    
+    public void Acao_20(Token token)
+    {
+        this.pilhaTipos.push("string");
+        this.codigo.append("ldstr " + token.getLexeme() + "\n");
     }
 }
