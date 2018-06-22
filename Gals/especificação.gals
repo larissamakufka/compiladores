@@ -93,7 +93,6 @@ whileTrue  = identificador : "whileTrue"
 <campo> 
 <definicao_constantes> 
 <lista_id> 
-<lista_id1>
 <lista_id2>
 <identificadores> 
 <lista_identificadores> 

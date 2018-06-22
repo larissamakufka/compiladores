@@ -60,11 +60,12 @@ public class Sintatico implements Constants {
             } else {
                 throw new SyntaticError(PARSER_ERROR[x], currentToken.getPosition());
             }
-        } else // isSemanticAction(x)
-        {
+        } else if (isSemanticAction(x)) {
             semanticAnalyser.executeAction(x - FIRST_SEMANTIC_ACTION, previousToken);
             return false;
         }
+        
+        return false;
     }
 
     private boolean pushProduction(int topStack, int tokenInput) {
