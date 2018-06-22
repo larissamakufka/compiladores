@@ -72,7 +72,7 @@ public class LexicoTest {
     public void test4() {
         String entrada = "|$";
 
-        String saida = "Erro na linha 1 - |$ símbolo inválido";
+        String saida = "Erro na linha 1 - | símbolo inválido";
 
         compilador.getTaEditor().setText(entrada);
         compilador.getJbCompilar().doClick();
@@ -83,7 +83,7 @@ public class LexicoTest {
     public void test5() {
         String entrada = "&a";
 
-        String saida = "Erro na linha 1 - &a símbolo inválido";
+        String saida = "Erro na linha 1 - & símbolo inválido";
 
         compilador.getTaEditor().setText(entrada);
         compilador.getJbCompilar().doClick();
@@ -299,16 +299,5 @@ public class LexicoTest {
         compilador.getTaEditor().setText(entrada);
         compilador.getJbCompilar().doClick();
         Assert.assertEquals(saida, compilador.getToken());
-    }
-
-    @Test
-    public void test14() {
-        String entrada = "&símboloErrado";
-
-        String saida = "Erro na linha 1 - &a símbolo inválido";
-
-        compilador.getTaEditor().setText(entrada);
-        compilador.getJbCompilar().doClick();
-        Assert.assertEquals(saida, compilador.getTaMensagens().getText());
     }
 }

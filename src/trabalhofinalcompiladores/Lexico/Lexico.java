@@ -9,7 +9,6 @@ public class Lexico implements Constants {
 
     private int position;
     private String input;
-    private char nextChar;
     private String actualToken;
 
     public Lexico() {
@@ -97,7 +96,6 @@ public class Lexico implements Constants {
         if (!hasInput()) {
             return null;
         }
-        setNextChar(' ');
 
         int start = position;
 
@@ -105,25 +103,28 @@ public class Lexico implements Constants {
         int lastState = 0;
         int endState = -1;
         int end = -1;
-        char nChar = ' ';
+        actualToken = "";
 
         while (hasInput()) {
             lastState = state;
-            nChar = nextChar();
+            char nChar = nextChar();
             state = nextState(nChar, state);
 
             if (state < 0) {
+                if (lastState == 0) {
+                    actualToken += nChar;
+                }
                 break;
             } else if (tokenForState(state) >= 0) {
                 endState = state;
                 end = position;
             }
+            actualToken += nChar;
         }
-        
+
         if (endState < 0 || (endState != state && tokenForState(lastState) == -2)) {
+            setActualToken(actualToken);
             throw new LexicalError(SCANNER_ERROR[lastState], start);
-        } else {
-            setNextChar(nChar);
         }
 
         position = end;
@@ -200,27 +201,8 @@ public class Lexico implements Constants {
         }
     }
 
-    public int getLinha(List<Integer> linhas, int posicao) {
-        int linha = 0;
-        for (int i = 0; i < linhas.size(); i++) {
-            linha++;
-            if (posicao <= linhas.get(i)) {
-                return linha;
-            }
-        }
-        return linha;
-    }
-
-    public char getNextChar() {
-        return nextChar;
-    }
-
-    public void setNextChar(char nextChar) {
-        if (nextChar != ' ') {
-            actualToken += nextChar;
-        } else {
-            actualToken = "";
-        }
+    public void setActualToken(String actualToken) {
+        this.actualToken = actualToken;
     }
 
     public String getActualToken() {

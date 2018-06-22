@@ -426,7 +426,7 @@ public class Compilador extends JFrame {
             // Deixar este while do jeito que está porque nos testes unitários é utilizada a variável "t" para verificação dos tokens
             while ((t = lexico.nextToken()) != null) {
                 if (!"".equals(lexico.getNomeClasse(t.getId()))) {
-                    String linhaTemp = String.valueOf(lexico.getLinha(linhas, t.getPosition()));
+                    String linhaTemp = String.valueOf(getLinha(linhas, t.getPosition()));
                     String lexicoTemp = lexico.getNomeClasse(t.getId());
 
                     String linha = linhaTemp + defineSpace(linhaTemp.length(), 8);
@@ -445,7 +445,7 @@ public class Compilador extends JFrame {
                 taMensagens.setText("nenhum programa para compilar");
             }
         } catch (LexicalError lexicalError) {
-            String erro = "Erro na linha " + lexico.getLinha(linhas, lexicalError.getPosition()) + " - ";
+            String erro = "Erro na linha " + getLinha(linhas, lexicalError.getPosition()) + " - ";
             if (lexicalError.getMessage().equals("símbolo inválido")) {
                 erro += lexico.getActualToken() + " " + lexicalError.getMessage();
             } else {
@@ -453,7 +453,7 @@ public class Compilador extends JFrame {
             }
             taMensagens.setText(erro);
         } catch (SyntaticError syntaticError) {
-            String erro = "Erro na linha " + lexico.getLinha(linhas, syntaticError.getPosition()) + " - encontrado " + sintatico.getEncontrado() + " " + syntaticError.getMessage();
+            String erro = "Erro na linha " + getLinha(linhas, syntaticError.getPosition()) + " - encontrado " + sintatico.getEncontrado() + " " + syntaticError.getMessage();
             taMensagens.setText(erro);
         } catch (SemanticError semanticError) {
             // Logger.getLogger(Compilador.class.getName()).log(Level.SEVERE, null, ex);
@@ -521,6 +521,17 @@ public class Compilador extends JFrame {
             }
         }
         linhas.add(chars.length);
+    }
+
+    public int getLinha(List<Integer> linhas, int posicao) {
+        int linha = 0;
+        for (int i = 0; i < linhas.size(); i++) {
+            linha++;
+            if (posicao <= linhas.get(i)) {
+                return linha;
+            }
+        }
+        return linha;
     }
 
     public static void main(String args[]) {
