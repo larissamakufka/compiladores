@@ -118,6 +118,36 @@ public class Semantico implements Constants {
                 this.Acao_20(token);
                 break;
             }
+            case 21:
+            {
+                this.Acao_20(token);
+                break;
+            }
+            case 22:
+            {
+                this.Acao_22(token);
+                break;
+            }
+            case 23:
+            {
+                this.Acao_23(token);
+                break;
+            }
+            case 24:
+            {
+                this.Acao_24(token);
+                break;
+            }
+            case 25:
+            {
+                this.Acao_25(token);
+                break;
+            }
+            case 26:
+            {
+                this.Acao_26(token);
+                break;
+            }
 
             default: throw new SemanticError("Ação semântica não reconhecida #" + action, token.getPosition());
         }
@@ -337,6 +367,20 @@ public class Semantico implements Constants {
     
     public void Acao_21(Token token)
     {
+        switch(token.getLexeme())
+        {
+            case "int":
+            {
+                this.tipoVar = "int64";
+                break;
+            }
+            
+            case "real":
+            {
+                this.tipoVar = "float64";
+                break;
+            }
+        }
     }
     
     public void Acao_22(Token token)
@@ -344,5 +388,23 @@ public class Semantico implements Constants {
         this.listaId.add(token.getLexeme());
     }
     
+    public void Acao_23(Token token)
+    {
+        
+    }
     
+    public void Acao_24(Token token)
+    {
+        
+    }
+    
+    public void Acao_25(Token token)
+    {
+        
+    }
+    
+    public void Acao_26(Token token)
+    {
+        
+    }
 }
