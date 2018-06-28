@@ -1,5 +1,7 @@
 package trabalhofinalcompiladores.Semantico;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Stack;
 import trabalhofinalcompiladores.Comum.Constants;
 import trabalhofinalcompiladores.Comum.Token;
@@ -7,8 +9,21 @@ import trabalhofinalcompiladores.Comum.Token;
 public class Semantico implements Constants {
 
     private String operador;
-    private StringBuilder codigo = new StringBuilder();
-    private Stack<String> pilhaTipos = new Stack<String>();
+    private StringBuilder codigo;
+    private Stack<String> pilhaTipos;
+    private HashMap<String, String> TabSimb;
+    private String tipoVar;
+    private ArrayList<String> listaId;
+    
+    public Semantico()
+    {
+        this.operador = "";
+        this.codigo = new StringBuilder();
+        this.pilhaTipos = new Stack<>();
+        this.TabSimb = new HashMap<>();
+        this.tipoVar = "";
+        this.listaId = new ArrayList<>();
+    }
     
     public void executeAction(int action, Token token) throws SemanticError {
         switch(action)
@@ -319,4 +334,15 @@ public class Semantico implements Constants {
         this.pilhaTipos.push("string");
         this.codigo.append("ldstr " + token.getLexeme() + "\n");
     }
+    
+    public void Acao_21(Token token)
+    {
+    }
+    
+    public void Acao_22(Token token)
+    {
+        this.listaId.add(token.getLexeme());
+    }
+    
+    
 }
