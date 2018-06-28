@@ -14,6 +14,8 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -42,6 +44,7 @@ public class Compilador extends JFrame {
     private File nomeArquivo;
     private List<Integer> linhas;
     private String token;
+    private String semanticText;
 
     public Compilador() {
         initComponents();
@@ -413,50 +416,25 @@ public class Compilador extends JFrame {
     }//GEN-LAST:event_jbRecortarActionPerformed
 
     private void jbCompilarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbCompilarActionPerformed
-        Lexico lexico = new Lexico();
-        Sintatico sintatico = new Sintatico();
-        Semantico semantico = new Semantico();
-        Token t;
-        try {
-            lexico.setInput(taEditor.getText());
-            taMensagens.setText("");
-            loadLines(taEditor.getText());
-            boolean ehValido = false;
-            this.token = "linha   classe               lexema";
-            // Deixar este while do jeito que está porque nos testes unitários é utilizada a variável "t" para verificação dos tokens
-            while ((t = lexico.nextToken()) != null) {
-                if (!"".equals(lexico.getNomeClasse(t.getId()))) {
-                    String linhaTemp = String.valueOf(getLinha(linhas, t.getPosition()));
-                    String lexicoTemp = lexico.getNomeClasse(t.getId());
+        taMensagens.setText(""); //$NON-NLS-1$
 
-                    String linha = linhaTemp + defineSpace(linhaTemp.length(), 8);
-                    String classe = lexicoTemp + defineSpace(lexicoTemp.length(), 21);
-                    String lexema = t.getLexeme();
+        File ilFile;
+        try (StringWriter sw = new StringWriter()) {
+            String erro = compilar(sw);
 
-                    this.token += "\n" + linha + classe + lexema;
-                    ehValido = true;
-                }
-            }
-            if (ehValido) {
-                lexico.setInput(taEditor.getText());
-                sintatico.parse(lexico, semantico);
-                taMensagens.setText("programa compilado com sucesso");
+            if (!"".equals(erro)) {
+                taMensagens.setText(erro);
             } else {
-                taMensagens.setText("nenhum programa para compilar");
+                ilFile = new File(nomeArquivo.getParentFile(), getNomePrograma() + ".il");
+                salvar(ilFile, sw.toString());
             }
-        } catch (LexicalError lexicalError) {
-            String erro = "Erro na linha " + getLinha(linhas, lexicalError.getPosition()) + " - ";
-            if (lexicalError.getMessage().equals("símbolo inválido")) {
-                erro += lexico.getActualToken() + " " + lexicalError.getMessage();
-            } else {
-                erro += lexicalError.getMessage();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+            String msg = ioe.getMessage();
+            if (msg.isEmpty()) {
+                msg = ioe.toString();
             }
-            taMensagens.setText(erro);
-        } catch (SyntaticError syntaticError) {
-            String erro = "Erro na linha " + getLinha(linhas, syntaticError.getPosition()) + " - encontrado " + sintatico.getEncontrado() + " " + syntaticError.getMessage();
-            taMensagens.setText(erro);
-        } catch (SemanticError semanticError) {
-            // Logger.getLogger(Compilador.class.getName()).log(Level.SEVERE, null, ex);
+            lbBarraStatus.setText("Erro: " + msg);
         }
     }//GEN-LAST:event_jbCompilarActionPerformed
 
@@ -494,7 +472,7 @@ public class Compilador extends JFrame {
                 jbCompilar.doClick();
                 break;
         }
-        
+
         if ((evt.getKeyCode() == KeyEvent.VK_N) && ((evt.getModifiers() & KeyEvent.CTRL_MASK) != 0)) {
             jbNovo.doClick();
         } else if ((evt.getKeyCode() == KeyEvent.VK_O) && ((evt.getModifiers() & KeyEvent.CTRL_MASK) != 0)) {
@@ -532,6 +510,62 @@ public class Compilador extends JFrame {
             }
         }
         return linha;
+    }
+
+    private String compilar(Writer outputWriter) throws IOException {
+        Lexico lexico = new Lexico();
+        Sintatico sintatico = new Sintatico();
+        Semantico semantico = new Semantico();
+        Token t;
+        try {
+            lexico.setInput(taEditor.getText());
+            taMensagens.setText("");
+            loadLines(taEditor.getText());
+            boolean ehValido = false;
+            this.token = "linha   classe               lexema";
+            // Deixar este while do jeito que está porque nos testes unitários é utilizada a variável "t" para verificação dos tokens
+            while ((t = lexico.nextToken()) != null) {
+                if (!"".equals(lexico.getNomeClasse(t.getId()))) {
+                    String linhaTemp = String.valueOf(getLinha(linhas, t.getPosition()));
+                    String lexicoTemp = lexico.getNomeClasse(t.getId());
+
+                    String linha = linhaTemp + defineSpace(linhaTemp.length(), 8);
+                    String classe = lexicoTemp + defineSpace(lexicoTemp.length(), 21);
+                    String lexema = t.getLexeme();
+
+                    this.token += "\n" + linha + classe + lexema;
+                    ehValido = true;
+                }
+            }
+            if (ehValido) {
+                lexico.setInput(taEditor.getText());
+                sintatico.parse(lexico, semantico);
+                taMensagens.setText("programa compilado com sucesso");
+            } else {
+                taMensagens.setText("nenhum programa para compilar");
+            }
+            if (outputWriter != null) {
+                outputWriter.append(semantico.getCodigo());
+            }
+        } catch (LexicalError lexicalError) {
+            String erro = "Erro na linha " + getLinha(linhas, lexicalError.getPosition()) + " - ";
+            if (lexicalError.getMessage().equals("símbolo inválido")) {
+                erro += lexico.getActualToken() + " " + lexicalError.getMessage();
+            } else {
+                erro += lexicalError.getMessage();
+            }
+            taMensagens.setText(erro);
+            return erro;
+        } catch (SyntaticError syntaticError) {
+            String erro = "Erro na linha " + getLinha(linhas, syntaticError.getPosition()) + " - encontrado " + sintatico.getEncontrado() + " " + syntaticError.getMessage();
+            taMensagens.setText(erro);
+            return erro;
+        } catch (SemanticError semanticError) {
+            String erro = semanticError.getMessage();
+            taMensagens.setText(erro);
+            return erro;
+        }
+        return "";
     }
 
     public static void main(String args[]) {
