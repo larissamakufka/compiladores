@@ -407,4 +407,34 @@ public class Semantico implements Constants {
     {
         
     }
+    
+    public void Acao_27()
+    {
+        
+    }
+    
+    public void Acao_28()
+    {
+        
+    }
+    
+    public void Acao_29()
+    {
+        
+    }
+    
+    public void Acao_30()
+    {
+        
+    }
+    
+    public void Acao_31()
+    {
+        
+    }
+    
+    public void Acao_32()
+    {
+        
+    }
 }
