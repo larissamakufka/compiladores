@@ -332,7 +332,7 @@ public class Semantico implements Constants {
     public void Acao_25(Token token) throws SemanticError {
         String id = token.getLexeme();
         if (!TabSimb.containsKey(id)) {
-            throw new SemanticError("Erro semântico encontrado na ação #25", token.getPosition());
+            throw new SemanticError("Identificador " + id + "não declarado.", token.getPosition());
         }
 
         String tipoId = TabSimb.get(id);
@@ -345,8 +345,25 @@ public class Semantico implements Constants {
         }
     }
 
-    public void Acao_26(Token token) {
+    public void Acao_26(Token token) throws SemanticError {
+        String id = token.getLexeme();
 
+        if (!this.TabSimb.containsKey(id)) {
+            throw new SemanticError("Identificador " + id + "não declarado.", token.getPosition());
+        }
+
+        String tipoId = this.TabSimb.get(id);
+        String tipoExp = this.pilhaTipos.pop();
+
+        if (!tipoId.equals(tipoExp)) {
+            throw new SemanticError("Tipos incompátiveis no comando de atribuição " + tipoId + " e " + tipoExp, token.getPosition());
+        }
+
+        if (tipoId.equals("int64")) {
+            this.codigo.append("conv.i8");
+        }
+
+        this.codigo.append("stloc " + id);
     }
 
     public void Acao_27() {
