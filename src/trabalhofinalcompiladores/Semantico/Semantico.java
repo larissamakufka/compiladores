@@ -321,12 +321,38 @@ public class Semantico implements Constants {
         this.listaId.add(token.getLexeme());
     }
 
-    public void Acao_23(Token token) {
+    public void Acao_23(Token token) throws SemanticError {
+        for (String id : listaId) {
+            if (TabSimb.containsKey(id)) {
+                throw new SemanticError("Erro semântico encontrado na ação #23", token.getPosition());
+            }
+            TabSimb.put(id, tipoVar);
+            this.codigo.append("(.locals(").append(tipoVar).append(id).append(")");
 
+        }
+        listaId.clear();
     }
 
-    public void Acao_24(Token token) {
-
+    public void Acao_24(Token token) throws SemanticError {
+        for (String id : listaId) {
+            if (!TabSimb.containsKey(id)) {
+                throw new SemanticError("Erro semântico encontrado na ação #24", token.getPosition());
+            }
+            String tipoId = TabSimb.get(id);
+            String classe = "";
+            switch (tipoId) {
+                case "int64":
+                    classe = "Int64";
+                    break;
+                case "float64":
+                    classe = "Double";
+                    break;
+            }
+            this.codigo.append("(call string [mscorlib]System.Console::ReadLine())\n");
+            this.codigo.append("(call ").append(tipoId).append(" [mscorlib]System.").append(classe).append("::Parse(string)\n");
+            this.codigo.append("(stloc id)\n");
+        }
+        listaId.clear();
     }
 
     public void Acao_25(Token token) throws SemanticError {

@@ -31,6 +31,10 @@ public class SemanticoTest {
         compilador = new Compilador();
     }
 
+    /**
+     * Ações a serem executadas: 15 22 22 21 23 20 14 22 24 22 25 25 3 26 25 14
+     * 16
+     */
     @Test
     public void test1() {
         String entrada = "def\n"
