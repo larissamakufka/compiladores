@@ -103,7 +103,7 @@ public class Semantico implements Constants {
                 break;
             }
             case 21: {
-                this.Acao_20(token);
+                this.Acao_21(token);
                 break;
             }
             case 22: {
@@ -310,7 +310,7 @@ public class Semantico implements Constants {
                 break;
             }
 
-            case "real": {
+            case "float": {
                 this.tipoVar = "float64";
                 break;
             }
