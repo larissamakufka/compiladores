@@ -168,7 +168,7 @@ public class Semantico implements Constants {
             this.pilhaTipos.push("int64");
         }
 
-        this.codigo.append("mul");
+        this.codigo.append(" mul\n");
     }
 
     public void Acao_4(Token token) throws SemanticError {
@@ -269,17 +269,17 @@ public class Semantico implements Constants {
             this.codigo.append("conv.i8 \n");
         }
 
-        this.codigo.append("call void [mscorlib]System.Console::Write(" + tipo + ") \n");
+        this.codigo.append(" call void [mscorlib]System.Console::Write(" + tipo + ")\n");
     }
 
     public void Acao_15() {
         this.codigo.append(
-                ".assembly extern mscorlib {} \n"
-                + ".assembly _codigo_objeto{} \n"
-                + ".module _codigo_objeto.exe \n\n"
-                + ".class public _UNICA{ \n"
-                + ".method static public void _principal() { \n"
-                + ".entrypoint \n"
+                ".assembly extern mscorlib {}\n"
+                + ".assembly _codigo_objeto{}\n"
+                + ".module _codigo_objeto.exe\n"
+                + ".class public _UNICA{\n"
+                + ".method static public void _principal() {\n"
+                + " .entrypoint\n"
         );
     }
 
@@ -300,7 +300,7 @@ public class Semantico implements Constants {
 
     public void Acao_20(Token token) {
         this.pilhaTipos.push("string");
-        this.codigo.append("ldstr " + token.getLexeme() + "\n");
+        this.codigo.append(" ldstr " + token.getLexeme() + "\n");
     }
 
     public void Acao_21(Token token) {
@@ -322,14 +322,20 @@ public class Semantico implements Constants {
     }
 
     public void Acao_23(Token token) throws SemanticError {
+        boolean localsJaEscrito = false;
         for (String id : listaId) {
             if (TabSimb.containsKey(id)) {
                 throw new SemanticError("Erro semântico encontrado na ação #23", token.getPosition());
             }
             TabSimb.put(id, tipoVar);
-            this.codigo.append("(.locals(").append(tipoVar).append(id).append(")");
-
+            if (localsJaEscrito) {
+                this.codigo.append(", ").append(tipoVar).append(" ").append(id);
+            } else {
+                this.codigo.append(" .locals (").append(tipoVar).append(" ").append(id);
+                localsJaEscrito = true;
+            }
         }
+        this.codigo.append(")\n");
         listaId.clear();
     }
 
@@ -348,9 +354,9 @@ public class Semantico implements Constants {
                     classe = "Double";
                     break;
             }
-            this.codigo.append("(call string [mscorlib]System.Console::ReadLine())\n");
-            this.codigo.append("(call ").append(tipoId).append(" [mscorlib]System.").append(classe).append("::Parse(string)\n");
-            this.codigo.append("(stloc id)\n");
+            this.codigo.append(" call string [mscorlib]System.Console::ReadLine()\n");
+            this.codigo.append(" call ").append(tipoId).append(" [mscorlib]System.").append(classe).append("::Parse(string)\n");
+            this.codigo.append(" stloc ").append(id).append("\n");
         }
         listaId.clear();
     }
@@ -364,7 +370,7 @@ public class Semantico implements Constants {
         String tipoId = TabSimb.get(id);
 
         this.pilhaTipos.push(tipoId);
-        this.codigo.append("ldloc " + id + "\n");
+        this.codigo.append(" ldloc " + id + "\n");
 
         if (tipoId.equals("int64")) {
             this.codigo.append("conv.r8 \n");
