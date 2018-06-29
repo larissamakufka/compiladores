@@ -331,22 +331,18 @@ public class Semantico implements Constants {
 
     public void Acao_25(Token token) throws SemanticError {
         String id = token.getLexeme();
-        if (!TabSimb.containsValue(id)) {
+        if (!TabSimb.containsKey(id)) {
             throw new SemanticError("Erro semântico encontrado na ação #25", token.getPosition());
         }
-        
+
         String tipoId = TabSimb.get(id);
 
-        /*id:= token.getlexeme
- se não TS.tem (id)
- então erro semântico, parar
- fimse
- tipoid:= TS.recupera_tipo(id)
- pilha.empilha (tipoid)
- código.adiciona (ldloc id)
- se (tipoid=int64)
- então código.adiciona (conv.r8)
- fimse*/
+        this.pilhaTipos.push(tipoId);
+        this.codigo.append("ldloc " + id + "\n");
+
+        if (tipoId.equals("int64")) {
+            this.codigo.append("conv.r8 \n");
+        }
     }
 
     public void Acao_26(Token token) {
