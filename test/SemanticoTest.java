@@ -36,7 +36,7 @@ public class SemanticoTest {
      * 16
      */
     @Test
-    public void test01() {
+    public void test02() {
         String entrada = "def\n"
                 + "var lado, area: float\n"
                 + "execute\n"
@@ -73,6 +73,10 @@ public class SemanticoTest {
         Assert.assertEquals(saida, compilador.getSemanticText());
     }
 
+    /**
+     * Ações a serem executadas: 15 22 22 21 23 22 24 27 25 9 5 10 28 22 25 3 26
+     * 30 28 20 14 22 6 26 29 20 14 25 14 16
+     */
     @Test
     public void test03() {
         String entrada = "def\n"
