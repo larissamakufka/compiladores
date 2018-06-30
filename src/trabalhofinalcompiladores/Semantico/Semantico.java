@@ -178,7 +178,7 @@ public class Semantico implements Constants {
         if (tipo1.equals(tipo2)) {
             this.pilhaTipos.push(tipo1);
         } else {
-            throw new SemanticError("Erro semântico encontrado na ação #4", token.getPosition());
+            throw new SemanticError("", token.getPosition());
         }
 
         this.codigo.append("div");
@@ -201,7 +201,7 @@ public class Semantico implements Constants {
         if (tipo.equals("float64") || tipo.equals("int64")) {
             this.pilhaTipos.push(tipo);
         } else {
-            throw new SemanticError("Erro semântico encontrado na ação #7", token.getPosition());
+            throw new SemanticError("Tipo imcompátivel de operação unária.", token.getPosition());
         }
     }
 
@@ -211,7 +211,7 @@ public class Semantico implements Constants {
         if (tipo.equals("float64") || tipo.equals("int64")) {
             this.pilhaTipos.push(tipo);
         } else {
-            throw new SemanticError("Erro semântico encontrado na ação #8", token.getPosition());
+            throw new SemanticError("Tipo imcompátivel de operação unária.", token.getPosition());
         }
     }
 
@@ -226,7 +226,7 @@ public class Semantico implements Constants {
         if (tipo1.equals(tipo2)) {
             this.pilhaTipos.push("bool");
         } else {
-            throw new SemanticError("Erro semântico encontrado na ação #10", token.getPosition());
+            throw new SemanticError("Tipos incompátiveis em operação relacional " + tipo1 + " e " + tipo2 + ".", token.getPosition());
         }
 
         switch (this.operador) {
