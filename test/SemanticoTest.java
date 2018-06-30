@@ -121,6 +121,7 @@ public class SemanticoTest {
                 + "}";
 
         compilador.getTaEditor().setText(entrada);
+        compilador.setExecutandoTestesUnitarios(true);
         compilador.getJbCompilar().doClick();
         Assert.assertEquals(saida, compilador.getSemanticText());
     }
