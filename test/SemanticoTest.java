@@ -127,6 +127,74 @@ public class SemanticoTest {
         compilador.getTaEditor().setText(entrada);
         compilador.setExecutandoTestesUnitarios(true);
         compilador.getJbCompilar().doClick();
-        Assert.assertEquals(saida, compilador.getTaMensagens().getText());
+        Assert.assertEquals(saida, compilador.getSemanticText());
+    }
+
+    /**
+     * Ações a serem executadas: 15 22 21 23 20 14 22 24 27 25 9 5 10 28 20 14
+     * 22 24 31 20 14 25 5 4 14 16
+     */
+    @Test
+    public void test04() {
+        String entrada = "def\n"
+                + "var CH: int\n"
+                + "execute\n"
+                + " print(\"qual a CH de compiladores? \")\n"
+                + " input(CH)\n"
+                + " (CH < 18) whileTrue:\n"
+                + " print(\"qual a CH de compiladores? \")\n"
+                + " input(CH)\n"
+                + " end\n"
+                + " print(\"total de créditos: \", CH / 18) ";
+
+        String saida = ".assembly extern mscorlib {}\n"
+                + ".assembly _codigo_objeto{}\n"
+                + ".module _codigo_objeto.exe\n"
+                + ".class public _UNICA{\n"
+                + ".method static public void _principal() {\n"
+                + " .entrypoint\n"
+                + " .locals (int64 CH)\n"
+                + " ldstr \"qual a CH de compiladores? \"\n"
+                + " call void [mscorlib]System.Console::Write(string)\n"
+                + " call string [mscorlib]System.Console::ReadLine()\n"
+                + " call int64 [mscorlib]System.Int64::Parse(string)\n"
+                + " stloc CH\n"
+                + "//início do código gerado pela ação #27\n"
+                + " label1:\n"
+                + "//fim\n"
+                + " ldloc CH\n"
+                + " conv.r8\n"
+                + " ldc.i8 18\n"
+                + " conv.r8\n"
+                + " clt\n"
+                + "//início do código gerado pela ação #28\n"
+                + " brfalse label2\n"
+                + "//fim\n"
+                + " ldstr \"qual a CH de compiladores? \"\n"
+                + " call void [mscorlib]System.Console::Write(string)\n"
+                + " call string [mscorlib]System.Console::ReadLine()\n"
+                + " call int64 [mscorlib]System.Int64::Parse(string)\n"
+                + " stloc CH\n"
+                + "//início do código gerado pela ação #31\n"
+                + " br label1\n"
+                + " label2:\n"
+                + "//fim\n"
+                + " ldstr \"total de créditos: \"\n"
+                + " call void [mscorlib]System.Console::Write(string)\n"
+                + " ldloc CH\n"
+                + " conv.r8\n"
+                + " ldc.i8 18\n"
+                + " conv.r8\n"
+                + " div\n"
+                + " conv.i8\n"
+                + " call void [mscorlib]System.Console::Write(int64)\n"
+                + " ret\n"
+                + " }\n"
+                + "} ";
+
+        compilador.getTaEditor().setText(entrada);
+        compilador.setExecutandoTestesUnitarios(true);
+        compilador.getJbCompilar().doClick();
+        Assert.assertEquals(saida, compilador.getSemanticText());
     }
 }
