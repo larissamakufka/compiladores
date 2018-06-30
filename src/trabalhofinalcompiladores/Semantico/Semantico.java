@@ -11,7 +11,7 @@ public class Semantico implements Constants {
     private String operador;
     private StringBuilder codigo;
     private Stack<String> pilhaTipos;
-    private HashMap<String, String> TabSimb;
+    private HashMap<String, Identificador> TabSimb;
     private String tipoVar;
     private ArrayList<String> listaId;
 
@@ -337,7 +337,7 @@ public class Semantico implements Constants {
             if (TabSimb.containsKey(id)) {
                 throw new SemanticError("Identificador " + id + " já declarado.", token.getPosition());
             }
-            TabSimb.put(id, tipoVar);
+            TabSimb.put(id, new Identificador('v', this.tipoVar, ""));
             if (localsJaEscrito) {
                 this.codigo.append(", ").append(tipoVar).append(" ").append(id);
             } else {
@@ -354,9 +354,9 @@ public class Semantico implements Constants {
             if (!TabSimb.containsKey(id)) {
                 throw new SemanticError("Identificador " + id + " não declarado.", token.getPosition());
             }
-            String tipoId = TabSimb.get(id);
+            Identificador tipoId = TabSimb.get(id);
             String classe = "";
-            switch (tipoId) {
+            switch (tipoId.tipo) {
                 case "int64":
                     classe = "Int64";
                     break;
@@ -377,12 +377,12 @@ public class Semantico implements Constants {
             throw new SemanticError("Identificador " + id + "não declarado.", token.getPosition());
         }
 
-        String tipoId = TabSimb.get(id);
+        Identificador identificador = TabSimb.get(id);
 
-        this.pilhaTipos.push(tipoId);
+        this.pilhaTipos.push(identificador.tipo);
         this.codigo.append(" ldloc " + id + "\n");
 
-        if (tipoId.equals("int64")) {
+        if (identificador.equals("int64")) {
             this.codigo.append("conv.r8 \n");
         }
     }
@@ -394,14 +394,14 @@ public class Semantico implements Constants {
             throw new SemanticError("Identificador " + id + "não declarado.", token.getPosition());
         }
 
-        String tipoId = this.TabSimb.get(id);
+        Identificador identificador = this.TabSimb.get(id);
         String tipoExp = this.pilhaTipos.pop();
 
-        if (!tipoId.equals(tipoExp)) {
-            throw new SemanticError("Tipos incompátiveis no comando de atribuição " + tipoId + " e " + tipoExp, token.getPosition());
+        if (!identificador.tipo.equals(tipoExp)) {
+            throw new SemanticError("Tipos incompátiveis no comando de atribuição " + identificador.tipo + " e " + tipoExp, token.getPosition());
         }
 
-        if (tipoId.equals("int64")) {
+        if (identificador.tipo.equals("int64")) {
             this.codigo.append("conv.i8");
         }
 
