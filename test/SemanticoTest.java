@@ -36,7 +36,7 @@ public class SemanticoTest {
      * 16
      */
     @Test
-    public void test1() {
+    public void test01() {
         String entrada = "def\n"
                 + "var lado, area: float\n"
                 + "execute\n"
@@ -53,26 +53,24 @@ public class SemanticoTest {
                 + " .entrypoint\n"
                 + " .locals (float64 lado, float64 area)\n"
                 + " ldstr \"digite um valor para lado: \"\n"
-                + " call void\n"
-                + "[mscorlib]System.Console::Write(string)\n"
+                + " call void [mscorlib]System.Console::Write(string)\n"
                 + " call string [mscorlib]System.Console::ReadLine()\n"
-                + " call float64\n"
-                + "[mscorlib]System.Double::Parse(string)\n"
+                + " call float64 [mscorlib]System.Double::Parse(string)\n"
                 + " stloc lado\n"
                 + " ldloc lado\n"
                 + " ldloc lado\n"
                 + " mul\n"
                 + " stloc area\n"
                 + " ldloc area\n"
-                + " call void\n"
-                + "[mscorlib]System.Console::Write(float64)\n"
+                + " call void [mscorlib]System.Console::Write(float64)\n"
                 + " ret\n"
                 + " }\n"
                 + "}";
 
         compilador.getTaEditor().setText(entrada);
+        compilador.setExecutandoTestesUnitarios(true);
         compilador.getJbCompilar().doClick();
-        Assert.assertEquals(saida, compilador.getTaMensagens().getText());
+        Assert.assertEquals(saida, compilador.getSemanticText());
     }
 
     @Test
@@ -123,6 +121,7 @@ public class SemanticoTest {
                 + "}";
 
         compilador.getTaEditor().setText(entrada);
+        compilador.setExecutandoTestesUnitarios(true);
         compilador.getJbCompilar().doClick();
         Assert.assertEquals(saida, compilador.getTaMensagens().getText());
     }

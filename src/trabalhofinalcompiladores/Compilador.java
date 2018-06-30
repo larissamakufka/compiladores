@@ -45,6 +45,7 @@ public class Compilador extends JFrame {
     private List<Integer> linhas;
     private String token;
     private String semanticText;
+    private boolean executandoTestesUnitarios = false;
 
     public Compilador() {
         initComponents();
@@ -418,15 +419,20 @@ public class Compilador extends JFrame {
     private void jbCompilarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbCompilarActionPerformed
         taMensagens.setText(""); //$NON-NLS-1$
 
+        if (!isExecutandoTestesUnitarios()) {
+            salvar(".txt");
+        }
         File ilFile;
         try (StringWriter sw = new StringWriter()) {
             String erro = compilar(sw);
 
             if (!"".equals(erro)) {
                 taMensagens.setText(erro);
-            } else {
+            } else if (!isExecutandoTestesUnitarios()) {
                 ilFile = new File(nomeArquivo.getParentFile(), getNomePrograma() + ".il");
                 salvar(ilFile, sw.toString());
+            } else if (isExecutandoTestesUnitarios()) {
+                setSemanticText(sw.toString());
             }
         } catch (IOException ioe) {
             ioe.printStackTrace();
@@ -736,4 +742,19 @@ public class Compilador extends JFrame {
         this.token = token;
     }
 
+    public boolean isExecutandoTestesUnitarios() {
+        return executandoTestesUnitarios;
+    }
+
+    public void setExecutandoTestesUnitarios(boolean executandoTestesUnitarios) {
+        this.executandoTestesUnitarios = executandoTestesUnitarios;
+    }
+
+    public String getSemanticText() {
+        return semanticText;
+    }
+
+    public void setSemanticText(String semanticText) {
+        this.semanticText = semanticText;
+    }
 }
