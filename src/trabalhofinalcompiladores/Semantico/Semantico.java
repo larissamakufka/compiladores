@@ -201,7 +201,7 @@ public class Semantico implements Constants {
         if (tipo.equals("float64") || tipo.equals("int64")) {
             this.pilhaTipos.push(tipo);
         } else {
-            throw new SemanticError("Tipo imcompátivel de operação unária.", token.getPosition());
+            throw new SemanticError("Tipo imcompátivel de operação unária \"" + tipo + "\".", token.getPosition());
         }
     }
 
@@ -211,7 +211,7 @@ public class Semantico implements Constants {
         if (tipo.equals("float64") || tipo.equals("int64")) {
             this.pilhaTipos.push(tipo);
         } else {
-            throw new SemanticError("Tipo imcompátivel de operação unária.", token.getPosition());
+            throw new SemanticError("Tipo imcompátivel de operação unária \"" + tipo + "\".", token.getPosition());
         }
     }
 
@@ -226,7 +226,7 @@ public class Semantico implements Constants {
         if (tipo1.equals(tipo2)) {
             this.pilhaTipos.push("bool");
         } else {
-            throw new SemanticError("Tipos incompátiveis em operação relacional " + tipo1 + " e " + tipo2 + ".", token.getPosition());
+            throw new SemanticError("Tipos incompátiveis em operação relacional \"" + tipo1 + "\" e \"" + tipo2 + "\".", token.getPosition());
         }
 
         switch (this.operador) {
@@ -297,6 +297,16 @@ public class Semantico implements Constants {
         this.codigo.append("ldstr " + quebraLinha);
         this.codigo.append("call void [mscorlib]System.Console::Write(string) \n");
     }
+    
+    public void Acao_18(Token token)
+    {
+        
+    }
+
+    public void Acao_19(Token token)
+    {
+        
+    }
 
     public void Acao_20(Token token) {
         this.pilhaTipos.push("string");
@@ -325,7 +335,7 @@ public class Semantico implements Constants {
         boolean localsJaEscrito = false;
         for (String id : listaId) {
             if (TabSimb.containsKey(id)) {
-                throw new SemanticError("Erro semântico encontrado na ação #23", token.getPosition());
+                throw new SemanticError("Identificador " + id + " já declarado.", token.getPosition());
             }
             TabSimb.put(id, tipoVar);
             if (localsJaEscrito) {
@@ -342,7 +352,7 @@ public class Semantico implements Constants {
     public void Acao_24(Token token) throws SemanticError {
         for (String id : listaId) {
             if (!TabSimb.containsKey(id)) {
-                throw new SemanticError("Erro semântico encontrado na ação #24", token.getPosition());
+                throw new SemanticError("Identificador " + id + " não declarado.", token.getPosition());
             }
             String tipoId = TabSimb.get(id);
             String classe = "";
