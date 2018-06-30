@@ -13,7 +13,7 @@ public class Semantico implements Constants {
     private Stack<String> pilhaTipos;
     private HashMap<String, String> TabSimb;
     private String tipoVar;
-    private ArrayList<Token> listaId;
+    private ArrayList<String> listaId;
 
     public Semantico() {
         this.operador = "";
@@ -285,8 +285,8 @@ public class Semantico implements Constants {
 
     public void Acao_16() {
         this.codigo.append(
-                " ret\n"
-                + " }\n"
+                "ret \n"
+                + "} \n"
                 + "}"
         );
     }
@@ -297,13 +297,15 @@ public class Semantico implements Constants {
         this.codigo.append("ldstr " + quebraLinha);
         this.codigo.append("call void [mscorlib]System.Console::Write(string) \n");
     }
-
-    public void Acao_18(Token token) {
-
+    
+    public void Acao_18(Token token)
+    {
+        
     }
 
-    public void Acao_19(Token token) {
-
+    public void Acao_19(Token token)
+    {
+        
     }
 
     public void Acao_20(Token token) {
@@ -326,29 +328,20 @@ public class Semantico implements Constants {
     }
 
     public void Acao_22(Token token) {
-        this.listaId.add(token);
+        this.listaId.add(token.getLexeme());
     }
 
     public void Acao_23(Token token) throws SemanticError {
         boolean localsJaEscrito = false;
-        for (Token id : listaId) {
-            String lexeme = id.getLexeme();
-            if (TabSimb.containsKey(lexeme)) {
-                throw new SemanticError("Erro semântico encontrado na ação #23", token.getPosition());
+        for (String id : listaId) {
+            if (TabSimb.containsKey(id)) {
+                throw new SemanticError("Identificador " + id + " já declarado.", token.getPosition());
             }
-<<<<<<< HEAD
             TabSimb.put(id, tipoVar);
-=======
-<<<<<<< HEAD
-            TabSimb.put(id, new Identificador('v', this.tipoVar, ""));
-=======
-            TabSimb.put(lexeme, tipoVar);
->>>>>>> bf9ef8e73dc6059778f18c8ae80d5a03547e7948
->>>>>>> parent of b5f46e2... Revert "Merge branch 'master' of https://github.com/larissamakufka/compiladores"
             if (localsJaEscrito) {
-                this.codigo.append(", ").append(tipoVar).append(" ").append(lexeme);
+                this.codigo.append(", ").append(tipoVar).append(" ").append(id);
             } else {
-                this.codigo.append(" .locals (").append(tipoVar).append(" ").append(lexeme);
+                this.codigo.append(" .locals (").append(tipoVar).append(" ").append(id);
                 localsJaEscrito = true;
             }
         }
@@ -357,20 +350,11 @@ public class Semantico implements Constants {
     }
 
     public void Acao_24(Token token) throws SemanticError {
-        for (Token id : listaId) {
-            String lexeme = id.getLexeme();
-            if (!TabSimb.containsKey(lexeme)) {
-                throw new SemanticError("Erro semântico encontrado na ação #24", token.getPosition());
+        for (String id : listaId) {
+            if (!TabSimb.containsKey(id)) {
+                throw new SemanticError("Identificador " + id + " não declarado.", token.getPosition());
             }
-<<<<<<< HEAD
             String tipoId = TabSimb.get(id);
-=======
-<<<<<<< HEAD
-            Identificador tipoId = TabSimb.get(id);
-=======
-            String tipoId = TabSimb.get(lexeme);
->>>>>>> bf9ef8e73dc6059778f18c8ae80d5a03547e7948
->>>>>>> parent of b5f46e2... Revert "Merge branch 'master' of https://github.com/larissamakufka/compiladores"
             String classe = "";
             switch (tipoId) {
                 case "int64":
@@ -382,7 +366,7 @@ public class Semantico implements Constants {
             }
             this.codigo.append(" call string [mscorlib]System.Console::ReadLine()\n");
             this.codigo.append(" call ").append(tipoId).append(" [mscorlib]System.").append(classe).append("::Parse(string)\n");
-            this.codigo.append(" stloc ").append(lexeme).append("\n");
+            this.codigo.append(" stloc ").append(id).append("\n");
         }
         listaId.clear();
     }
@@ -404,22 +388,13 @@ public class Semantico implements Constants {
     }
 
     public void Acao_26(Token token) throws SemanticError {
-        Token id = listaId.remove(0);
-        String lexeme = id.getLexeme();
+        String id = token.getLexeme();
 
-        if (!this.TabSimb.containsKey(lexeme)) {
-            throw new SemanticError("Identificador " + lexeme + "não declarado.", id.getPosition());
+        if (!this.TabSimb.containsKey(id)) {
+            throw new SemanticError("Identificador " + id + "não declarado.", token.getPosition());
         }
 
-<<<<<<< HEAD
         String tipoId = this.TabSimb.get(id);
-=======
-<<<<<<< HEAD
-        Identificador identificador = this.TabSimb.get(id);
-=======
-        String tipoId = this.TabSimb.get(lexeme);
->>>>>>> bf9ef8e73dc6059778f18c8ae80d5a03547e7948
->>>>>>> parent of b5f46e2... Revert "Merge branch 'master' of https://github.com/larissamakufka/compiladores"
         String tipoExp = this.pilhaTipos.pop();
 
         if (!tipoId.equals(tipoExp)) {
@@ -430,7 +405,7 @@ public class Semantico implements Constants {
             this.codigo.append("conv.i8");
         }
 
-        this.codigo.append(" stloc ").append(lexeme).append("\n");
+        this.codigo.append("stloc " + id);
     }
 
     public void Acao_27() {
