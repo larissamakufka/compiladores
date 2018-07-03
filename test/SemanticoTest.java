@@ -79,16 +79,17 @@ public class SemanticoTest {
      */
     @Test
     public void test03() {
-        String entrada = "def\n"
-                + "var lado, area: float\n"
+        String entrada = /*15*/ "def\n"
+                + "var lado" /*22*/ + ", area" /*22*/ + ": float\n" /*21 23*/
                 + "execute\n"
-                + "input(lado)\n"
-                + "(lado > 0) ifTrue:\n"
-                + "ifFalse:\n"
-                + "  print(\"erro: valor inválido para lado - \")\n"
-                + "  area:= 0,0\n"
-                + "end\n"
-                + " print(\"area: \", area)";
+                + "input(lado" /*22 24*/ + ")\n" /*27*/
+                + "(lado" /*25*/ + " >" /*9*/ + " 0" /*5 10*/ + ") ifTrue" /*28*/ + ":\n"
+                + "  area" /*22*/ + " := lado" /*25*/ + " * lado\n" /*25 3 26 30*/
+                + "ifFalse:\n"/*28*/
+                + "  print(\"erro: valor inválido para lado - \"" /*20 14*/ + ")\n"
+                + "  area" /*22*/ + " := 0,0\n" /*6 26*/
+                + "end\n" /*29*/
+                + " print(\"area: \"" /*20 14*/ + ", area" /*25 14*/ + ")" /*16*/;
 
         String saida = ".assembly extern mscorlib {}\n"
                 + ".assembly _codigo_objeto{}\n"

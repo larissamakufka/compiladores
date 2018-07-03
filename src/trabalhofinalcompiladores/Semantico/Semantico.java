@@ -8,6 +8,10 @@ import trabalhofinalcompiladores.Comum.Token;
 
 public class Semantico implements Constants {
 
+    final String INT64 = "Int64";
+    final String FLOAT64 = "float64";
+    final String STRING = "String";
+
     private String operador;
     private StringBuilder codigo;
     private Stack<String> pilhaTipos;
@@ -33,7 +37,8 @@ public class Semantico implements Constants {
     }
 
     private String novoRotulo() {
-        return "label_" + this.numRotulo++;
+        this.numRotulo++;
+        return "label" + this.numRotulo;
     }
 
     public void executeAction(int action, Token token) throws SemanticError {
@@ -53,7 +58,7 @@ public class Semantico implements Constants {
             /*case 4: {
                 this.Acao_4(token);
                 break;
-            }
+            }*/
             case 5: {
                 this.Acao_5(token);
                 break;
@@ -62,14 +67,14 @@ public class Semantico implements Constants {
                 this.Acao_6(token);
                 break;
             }
-            case 7: {
+            /*case 7: {
                 this.Acao_7(token);
                 break;
             }
             case 8: {
                 this.Acao_8(token);
                 break;
-            }
+            }*/
             case 9: {
                 this.Acao_9(token);
                 break;
@@ -78,7 +83,7 @@ public class Semantico implements Constants {
                 this.Acao_10(token);
                 break;
             }
-            case 11: {
+            /*case 11: {
                 this.Acao_11();
                 break;
             }
@@ -176,10 +181,10 @@ public class Semantico implements Constants {
         String tipo1 = this.pilhaTipos.pop();
         String tipo2 = this.pilhaTipos.pop();
 
-        if (tipo1.equals("float64") || tipo2.equals("float64")) {
-            this.pilhaTipos.push("float64");
+        if (tipo1.equals(FLOAT64) || tipo2.equals(FLOAT64)) {
+            this.pilhaTipos.push(FLOAT64);
         } else {
-            this.pilhaTipos.push("int64");
+            this.pilhaTipos.push(INT64);
         }
 
         this.codigo.append("add");
@@ -189,10 +194,10 @@ public class Semantico implements Constants {
         String tipo1 = this.pilhaTipos.pop();
         String tipo2 = this.pilhaTipos.pop();
 
-        if (tipo1.equals("float64") || tipo2.equals("float64")) {
-            this.pilhaTipos.push("float64");
+        if (tipo1.equals(FLOAT64) || tipo2.equals(FLOAT64)) {
+            this.pilhaTipos.push(FLOAT64);
         } else {
-            this.pilhaTipos.push("int64");
+            this.pilhaTipos.push(INT64);
         }
 
         this.codigo.append("sub");
@@ -202,10 +207,10 @@ public class Semantico implements Constants {
         String tipo1 = this.pilhaTipos.pop();
         String tipo2 = this.pilhaTipos.pop();
 
-        if (tipo1.equals("float64") || tipo2.equals("float64")) {
-            this.pilhaTipos.push("float64");
+        if (tipo1.equals(FLOAT64) || tipo2.equals(FLOAT64)) {
+            this.pilhaTipos.push(FLOAT64);
         } else {
-            this.pilhaTipos.push("int64");
+            this.pilhaTipos.push(INT64);
         }
 
         this.codigo.append(" mul\n");
@@ -225,20 +230,20 @@ public class Semantico implements Constants {
     }
 
     private void Acao_5(Token token) {
-        this.pilhaTipos.push("int64");
-        this.codigo.append("ldc.i8 ").append(token.getLexeme()).append("\n");
-        this.codigo.append("conv.r8 \n");
+        this.pilhaTipos.push(INT64);
+        this.codigo.append(" ldc.i8 ").append(token.getLexeme()).append("\n");
+        this.codigo.append(" conv.r8\n");
     }
 
     private void Acao_6(Token token) {
-        this.pilhaTipos.push("float64");
+        this.pilhaTipos.push(FLOAT64);
         this.codigo.append("ldc.r8 ").append(token.getLexeme()).append("\n");
     }
 
     private void Acao_7(Token token) throws SemanticError {
         String tipo = this.pilhaTipos.pop();
 
-        if (tipo.equals("float64") || tipo.equals("int64")) {
+        if (tipo.equals(FLOAT64) || tipo.equals(INT64)) {
             this.pilhaTipos.push(tipo);
         } else {
             throw new SemanticError("Tipo imcompátivel de operação unária \"" + tipo + "\".", token.getPosition());
@@ -248,7 +253,7 @@ public class Semantico implements Constants {
     private void Acao_8(Token token) throws SemanticError {
         String tipo = this.pilhaTipos.pop();
 
-        if (tipo.equals("float64") || tipo.equals("int64")) {
+        if (tipo.equals(FLOAT64) || tipo.equals(INT64)) {
             this.pilhaTipos.push(tipo);
         } else {
             throw new SemanticError("Tipo imcompátivel de operação unária \"" + tipo + "\".", token.getPosition());
@@ -263,7 +268,7 @@ public class Semantico implements Constants {
         String tipo1 = this.pilhaTipos.pop();
         String tipo2 = this.pilhaTipos.pop();
 
-        if (tipo1.equals(tipo2)) {
+        if (tipo1.equals(tipo2) || ((tipo1.equals(INT64) || tipo1.equals(FLOAT64)) && (tipo2.equals(INT64) || tipo2.equals(FLOAT64)))) {
             this.pilhaTipos.push("bool");
         } else {
             throw new SemanticError("Tipos incompátiveis em operação relacional \"" + tipo1 + "\" e \"" + tipo2 + "\".", token.getPosition());
@@ -271,11 +276,14 @@ public class Semantico implements Constants {
 
         switch (this.operador) {
             case ">":
-                this.codigo.append("cgt \n");
+                this.codigo.append(" cgt\n");
+                break;
             case "<":
-                this.codigo.append("clt \n");
+                this.codigo.append(" clt\n");
+                break;
             case "=":
-                this.codigo.append("ceq \n");
+                this.codigo.append(" ceq\n");
+                break;
         }
     }
 
@@ -305,7 +313,7 @@ public class Semantico implements Constants {
     private void Acao_14() {
         String tipo = this.pilhaTipos.pop();
 
-        if (tipo.equals("int64")) {
+        if (tipo.equals(INT64)) {
             this.codigo.append("conv.i8 \n");
         }
 
@@ -345,19 +353,19 @@ public class Semantico implements Constants {
     }
 
     private void Acao_20(Token token) {
-        this.pilhaTipos.push("string");
+        this.pilhaTipos.push(STRING);
         this.codigo.append(" ldstr ").append(token.getLexeme()).append("\n");
     }
 
     private void Acao_21(Token token) {
         switch (token.getLexeme()) {
             case "int": {
-                this.tipoVar = "int64";
+                this.tipoVar = INT64;
                 break;
             }
 
             case "float": {
-                this.tipoVar = "float64";
+                this.tipoVar = FLOAT64;
                 break;
             }
         }
@@ -395,10 +403,10 @@ public class Semantico implements Constants {
             Identificador identificador = this.TabSimb.get(lexeme);
             String classe = "";
             switch (identificador.tipo) {
-                case "int64":
-                    classe = "Int64";
+                case INT64:
+                    classe = INT64;
                     break;
-                case "float64":
+                case FLOAT64:
                     classe = "Double";
                     break;
             }
@@ -421,20 +429,20 @@ public class Semantico implements Constants {
 
         switch (identificador.classe) {
             case 'v': {
-                this.codigo.append("ldloc ").append(lexeme).append("\n");
+                this.codigo.append(" ldloc ").append(lexeme).append("\n");
                 break;
             }
             case 'c': {
                 switch (identificador.tipo) {
-                    case "int64": {
+                    case INT64: {
                         this.codigo.append("ldc.i8 ").append(identificador.valor).append("\n");
                         break;
                     }
-                    case "float64": {
+                    case FLOAT64: {
                         this.codigo.append("ldc.r8 ").append(identificador.valor).append("\n");
                         break;
                     }
-                    case "string": {
+                    case STRING: {
                         this.codigo.append("ldstr ").append(identificador.valor).append("\n");
                         break;
                     }
@@ -443,7 +451,7 @@ public class Semantico implements Constants {
             }
         }
 
-        if (identificador.tipo.equals("int64")) {
+        if (identificador.tipo.equals(INT64)) {
             this.codigo.append("conv.r8 \n");
         }
     }
@@ -463,7 +471,7 @@ public class Semantico implements Constants {
             throw new SemanticError("Tipos incompátiveis no comando de atribuição " + identificador.tipo + " e " + tipoExp, id.getPosition());
         }
 
-        if (identificador.tipo.equals("int64")) {
+        if (identificador.tipo.equals(INT64)) {
             this.codigo.append("conv.i8");
         }
 
@@ -475,7 +483,7 @@ public class Semantico implements Constants {
 
         this.pilhaRotulos.push(rotulo);
 
-        this.codigo.append(rotulo).append(": \n");
+        this.codigo.append(" ").append(rotulo).append(":\n");
     }
 
     private void Acao_28() {
@@ -483,7 +491,7 @@ public class Semantico implements Constants {
 
         this.pilhaRotulos.push(rotulo);
 
-        this.codigo.append("brfalse ").append(rotulo);
+        this.codigo.append(" brfalse ").append(rotulo).append("\n");
     }
 
     private void Acao_29() {
@@ -496,10 +504,10 @@ public class Semantico implements Constants {
 
     private void Acao_30() {
         String rotulo = this.pilhaRotulos.pop();
-        String rotulo1 = this.pilhaRotulos.pop();
+        String newRotulo = novoRotulo();
 
-        this.codigo.append("br ").append(rotulo);
-        this.codigo.append(rotulo1).append(": \n");
+        this.codigo.append(" br ").append(newRotulo).append("\n");
+        this.codigo.append(" ").append(rotulo).append(":\n");
     }
 
     private void Acao_31() {
