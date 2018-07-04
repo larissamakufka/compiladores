@@ -10,7 +10,7 @@ public class Semantico implements Constants {
 
     final String INT64 = "Int64";
     final String FLOAT64 = "float64";
-    final String STRING = "String";
+    final String STRING = "string";
 
     private String operador;
     private StringBuilder codigo;

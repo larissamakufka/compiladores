@@ -133,7 +133,7 @@ whileTrue  = identificador : "whileTrue"
 
 <comando1> ::= ":=" <expressao> #26 | set "(" identificador "," <expressao> ")";
 
-<comando2> ::= ifFalse <condicao> | whileTrue #28 ":" <lista_comandos> end #31 | whileFalse #28 ":" <lista_comandos> end #31 | ifTrue <comando3>;
+<comando2> ::= ifFalse <condicao> | whileTrue #28 ":" <lista_comandos> end #31 | whileFalse ":" <lista_comandos> end #31 | ifTrue <comando3>;
 
 <comando3> ::= #28 ":" <lista_comandos> <comando4>;
 

@@ -37,13 +37,13 @@ public class SemanticoTest {
      */
     @Test
     public void test02() {
-        String entrada = "def\n"
-                + "var lado, area: float\n"
+        String entrada = /*15*/ "def\n"
+                + "var lado"/*22*/ + ", area" /*22*/ + ": float\n" /*21 23*/
                 + "execute\n"
-                + " print(\"digite um valor para lado: \")\n"
-                + " input(lado)\n"
-                + " area:= lado * lado\n"
-                + " print(area)";
+                + " print(\"digite um valor para lado:" /*20 14*/ + " \")\n"
+                + " input(lado" /*22 24*/ + ")\n"
+                + " area" /*22*/ + " := lado"/*25*/ + " * lado\n" /*25 3 26*/
+                + " print(area"/*25 14*/ + ")"; /*16*/
 
         String saida = ".assembly extern mscorlib {}\n"
                 + ".assembly _codigo_objeto{}\n"
@@ -101,22 +101,18 @@ public class SemanticoTest {
                 + " call string [mscorlib]System.Console::ReadLine()\n"
                 + " call float64 [mscorlib]System.Double::Parse(string)\n"
                 + " stloc lado\n"
-                // implementar #27
                 + " ldloc lado\n"
                 + " ldc.i8 0\n"
                 + " conv.r8\n"
                 + " cgt\n"
-                // implementar #28
                 + " ldloc lado\n"
                 + " ldloc lado\n"
                 + " mul\n"
                 + " stloc area\n"
-                // implementar #30
                 + " ldstr \"erro: valor inválido para o lado - \"\n"
                 + " call void [mscorlib]System.Console::Write(string)\n"
                 + " ldc.r8 0.0\n"
                 + " stloc area\n"
-                // implementar #29
                 + " ldstr \"área: \"\n"
                 + " call void [mscorlib]System.Console::Write(string)\n"
                 + " ldloc area\n"
@@ -137,16 +133,17 @@ public class SemanticoTest {
      */
     @Test
     public void test04() {
-        String entrada = "def\n"
-                + "var CH: int\n"
+        String entrada = /*22*/ "def\n"
+                + "var CH" /*22*/ + ": int\n" /*21 23*/
                 + "execute\n"
-                + " print(\"qual a CH de compiladores? \")\n"
-                + " input(CH)\n"
-                + " (CH < 18) whileTrue:\n"
-                + " print(\"qual a CH de compiladores? \")\n"
-                + " input(CH)\n"
-                + " end\n"
-                + " print(\"total de créditos: \", CH / 18) ";
+                + " print(\"qual a CH de compiladores? \"" /*20 14*/ + ")\n"
+                + " input(CH" /*22 24*/ + ")\n"
+                + /*27*/ " (CH" /*25*/ + " <" /*9*/ + " 18" /*5 10*/ + ") "
+                + "whileTrue:\n" /*28*/
+                + " print(\"qual a CH de compiladores? \"" /*20 14*/ + ")\n"
+                + " input(CH" /*22 24*/ + ")\n"
+                + " end\n" /*31*/
+                + " print(\"total de créditos: \"" /*20 14*/ + ", CH" /*25*/ + " / 18" /*5 4 14*/ + ")"; /*16*/
 
         String saida = ".assembly extern mscorlib {}\n"
                 + ".assembly _codigo_objeto{}\n"
