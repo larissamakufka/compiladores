@@ -11,6 +11,7 @@ public class Semantico implements Constants {
     final String INT64 = "Int64";
     final String FLOAT64 = "float64";
     final String STRING = "string";
+    final String BOOL = "bool";
 
     private String operador;
     private StringBuilder codigo;
@@ -256,7 +257,7 @@ public class Semantico implements Constants {
         if (tipo.equals(FLOAT64) || tipo.equals(INT64)) {
             this.pilhaTipos.push(tipo);
         } else {
-            throw new SemanticError("Tipo imcompátivel de operação unária \"" + tipo + "\".", token.getPosition());
+            throw new SemanticError("Tipo imcompátivel de operação unária.", token.getPosition());
         }
     }
 
@@ -269,9 +270,9 @@ public class Semantico implements Constants {
         String tipo2 = this.pilhaTipos.pop();
 
         if (tipo1.equals(tipo2) || ((tipo1.equals(INT64) || tipo1.equals(FLOAT64)) && (tipo2.equals(INT64) || tipo2.equals(FLOAT64)))) {
-            this.pilhaTipos.push("bool");
+            this.pilhaTipos.push(BOOL);
         } else {
-            throw new SemanticError("Tipos incompátiveis em operação relacional \"" + tipo1 + "\" e \"" + tipo2 + "\".", token.getPosition());
+            throw new SemanticError("Tipos incompátiveis em operação relacional.", token.getPosition());
         }
 
         switch (this.operador) {
@@ -288,22 +289,22 @@ public class Semantico implements Constants {
     }
 
     private void Acao_11() {
-        this.pilhaTipos.push("bool");
+        this.pilhaTipos.push(BOOL);
         this.codigo.append("ldc.r4.1 \n");
     }
 
     private void Acao_12() {
-        this.pilhaTipos.push("bool");
+        this.pilhaTipos.push(BOOL);
         this.codigo.append("ldc.r4.0 \n");
     }
 
     private void Acao_13(Token token) throws SemanticError {
         String tipo = this.pilhaTipos.pop();
 
-        if (tipo.equals("bool")) {
-            this.pilhaTipos.push("bool");
+        if (tipo.equals(BOOL)) {
+            this.pilhaTipos.push(BOOL);
         } else {
-            throw new SemanticError("Erro semântico encontrado na ação #13", token.getPosition());
+            throw new SemanticError("Tipo incompatível em expressão lógica unária.", token.getPosition());
         }
 
         this.codigo.append("ldc.i4.1 \n");
@@ -344,12 +345,26 @@ public class Semantico implements Constants {
         this.codigo.append("call void [mscorlib]System.Console::Write(string)\n");
     }
 
-    private void Acao_18(Token token) {
+    private void Acao_18(Token token) throws SemanticError {
+        String tipo1 = this.pilhaTipos.pop();
+        String tipo2 = this.pilhaTipos.pop();
 
+        if (!tipo1.equals(tipo2)) {
+            throw new SemanticError("Tipos incompatíveis em expressão lógica binária.", token.getPosition());
+        }
+        
+        this.codigo.append("and \n");
     }
 
-    private void Acao_19(Token token) {
+    private void Acao_19(Token token) throws SemanticError {
+       String tipo1 = this.pilhaTipos.pop();
+       String tipo2 = this.pilhaTipos.pop();
 
+       if (!tipo1.equals(tipo2)) {
+           throw new SemanticError("Tipos incompatíveis em expressão lógica binária.", token.getPosition());
+       }
+        
+       this.codigo.append("or \n");
     }
 
     private void Acao_20(Token token) {
@@ -468,7 +483,7 @@ public class Semantico implements Constants {
         String tipoExp = this.pilhaTipos.pop();
 
         if (!identificador.tipo.equals(tipoExp)) {
-            throw new SemanticError("Tipos incompátiveis no comando de atribuição " + identificador.tipo + " e " + tipoExp, id.getPosition());
+            throw new SemanticError("Tipos incompatíveis no comando de atribuição.", id.getPosition());
         }
 
         if (identificador.tipo.equals(INT64)) {
