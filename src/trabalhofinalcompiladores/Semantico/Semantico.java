@@ -247,7 +247,7 @@ public class Semantico implements Constants {
         if (tipo.equals(FLOAT64) || tipo.equals(INT64)) {
             this.pilhaTipos.push(tipo);
         } else {
-            throw new SemanticError("Tipo imcompátivel de operação unária \"" + tipo + "\".", token.getPosition());
+            throw new SemanticError("Tipo imcompátivel de operação unária.", token.getPosition());
         }
     }
 
