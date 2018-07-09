@@ -435,7 +435,7 @@ public class Semantico implements Constants {
     private void Acao_25(Token token) throws SemanticError {
         String lexeme = token.getLexeme();
         if (!TabSimb.containsKey(lexeme)) {
-            throw new SemanticError("Identificador " + lexeme + "não declarado.", token.getPosition());
+            throw new SemanticError("Identificador " + lexeme + " não declarado.", token.getPosition());
         }
 
         Identificador identificador = TabSimb.get(lexeme);
@@ -476,7 +476,7 @@ public class Semantico implements Constants {
         String lexeme = id.getLexeme();
 
         if (!this.TabSimb.containsKey(lexeme)) {
-            throw new SemanticError("Identificador " + lexeme + "não declarado.", id.getPosition());
+            throw new SemanticError("Identificador " + lexeme + " não declarado.", id.getPosition());
         }
 
         Identificador identificador = this.TabSimb.get(lexeme);
