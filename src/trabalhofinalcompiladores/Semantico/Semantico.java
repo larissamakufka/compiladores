@@ -8,7 +8,7 @@ import trabalhofinalcompiladores.Comum.Token;
 
 public class Semantico implements Constants {
 
-    final String INT64 = "Int64";
+    final String INT64 = "int64";
     final String FLOAT64 = "float64";
     final String STRING = "string";
     final String BOOL = "bool";
@@ -44,22 +44,22 @@ public class Semantico implements Constants {
 
     public void executeAction(int action, Token token) throws SemanticError {
         switch (action) {
-            /*case 1: {
-                this.Acao_1();
+            case 1: {
+                this.Acao_1(token);
                 break;
             }
             case 2: {
-                this.Acao_2();
-                break;
-            }*/
-            case 3: {
-                this.Acao_3();
+                this.Acao_2(token);
                 break;
             }
-            /*case 4: {
+            case 3: {
+                this.Acao_3(token);
+                break;
+            }
+            case 4: {
                 this.Acao_4(token);
                 break;
-            }*/
+            }
             case 5: {
                 this.Acao_5(token);
                 break;
@@ -178,9 +178,13 @@ public class Semantico implements Constants {
         }
     }
 
-    private void Acao_1() {
+    private void Acao_1(Token token) throws SemanticError {
         String tipo1 = this.pilhaTipos.pop();
         String tipo2 = this.pilhaTipos.pop();
+
+        if (tipo1.equals(STRING) || tipo2.equals(STRING)) {
+            throw new SemanticError("Tipos incompatíveis em operação aritmética binária.", token.getPosition());
+        }
 
         if (tipo1.equals(FLOAT64) || tipo2.equals(FLOAT64)) {
             this.pilhaTipos.push(FLOAT64);
@@ -188,12 +192,16 @@ public class Semantico implements Constants {
             this.pilhaTipos.push(INT64);
         }
 
-        this.codigo.append("add");
+        this.codigo.append(" add \n");
     }
 
-    private void Acao_2() {
+    private void Acao_2(Token token) throws SemanticError {
         String tipo1 = this.pilhaTipos.pop();
         String tipo2 = this.pilhaTipos.pop();
+
+        if (tipo1.equals(STRING) || tipo2.equals(STRING)) {
+            throw new SemanticError("Tipos incompatíveis em operação aritmética binária.", token.getPosition());
+        }
 
         if (tipo1.equals(FLOAT64) || tipo2.equals(FLOAT64)) {
             this.pilhaTipos.push(FLOAT64);
@@ -201,12 +209,16 @@ public class Semantico implements Constants {
             this.pilhaTipos.push(INT64);
         }
 
-        this.codigo.append("sub");
+        this.codigo.append(" sub \n");
     }
 
-    private void Acao_3() {
+    private void Acao_3(Token token) throws SemanticError {
         String tipo1 = this.pilhaTipos.pop();
         String tipo2 = this.pilhaTipos.pop();
+
+        if (tipo1.equals(STRING) || tipo2.equals(STRING)) {
+            throw new SemanticError("Tipos incompatíveis em operação aritmética binária.", token.getPosition());
+        }
 
         if (tipo1.equals(FLOAT64) || tipo2.equals(FLOAT64)) {
             this.pilhaTipos.push(FLOAT64);
@@ -214,7 +226,7 @@ public class Semantico implements Constants {
             this.pilhaTipos.push(INT64);
         }
 
-        this.codigo.append(" mul\n");
+        this.codigo.append(" mul \n");
     }
 
     private void Acao_4(Token token) throws SemanticError {
@@ -224,21 +236,21 @@ public class Semantico implements Constants {
         if (tipo1.equals(tipo2)) {
             this.pilhaTipos.push(tipo1);
         } else {
-            throw new SemanticError("", token.getPosition());
+            throw new SemanticError("Tipos incompatíveis em operação aritmética binária.", token.getPosition());
         }
 
-        this.codigo.append("div");
+        this.codigo.append("div \n");
     }
 
     private void Acao_5(Token token) {
         this.pilhaTipos.push(INT64);
-        this.codigo.append(" ldc.i8 ").append(token.getLexeme()).append("\n");
-        this.codigo.append(" conv.r8\n");
+        this.codigo.append(" ldc.i8 ").append(token.getLexeme()).append(" \n");
+        this.codigo.append(" conv.r8 \n");
     }
 
     private void Acao_6(Token token) {
         this.pilhaTipos.push(FLOAT64);
-        this.codigo.append("ldc.r8 ").append(token.getLexeme()).append("\n");
+        this.codigo.append(" ldc.r8 ").append(token.getLexeme()).append(" \n");
     }
 
     private void Acao_7(Token token) throws SemanticError {
@@ -277,25 +289,25 @@ public class Semantico implements Constants {
 
         switch (this.operador) {
             case ">":
-                this.codigo.append(" cgt\n");
+                this.codigo.append(" cgt \n");
                 break;
             case "<":
-                this.codigo.append(" clt\n");
+                this.codigo.append(" clt \n");
                 break;
             case "=":
-                this.codigo.append(" ceq\n");
+                this.codigo.append(" ceq \n");
                 break;
         }
     }
 
     private void Acao_11() {
         this.pilhaTipos.push(BOOL);
-        this.codigo.append("ldc.r4.1 \n");
+        this.codigo.append(" ldc.r4.1 \n");
     }
 
     private void Acao_12() {
         this.pilhaTipos.push(BOOL);
-        this.codigo.append("ldc.r4.0 \n");
+        this.codigo.append(" ldc.r4.0 \n");
     }
 
     private void Acao_13(Token token) throws SemanticError {
@@ -307,18 +319,18 @@ public class Semantico implements Constants {
             throw new SemanticError("Tipo incompatível em expressão lógica unária.", token.getPosition());
         }
 
-        this.codigo.append("ldc.i4.1 \n");
-        this.codigo.append("xor \n");
+        this.codigo.append(" ldc.i4.1 \n");
+        this.codigo.append(" xor \n");
     }
 
     private void Acao_14() {
         String tipo = this.pilhaTipos.pop();
 
         if (tipo.equals(INT64)) {
-            this.codigo.append("conv.i8 \n");
+            this.codigo.append(" conv.i8 \n");
         }
 
-        this.codigo.append(" call void [mscorlib]System.Console::Write(").append(tipo).append(")\n");
+        this.codigo.append(" call void [mscorlib]System.Console::Write(").append(tipo).append(") \n");
     }
 
     private void Acao_15() {
@@ -341,8 +353,8 @@ public class Semantico implements Constants {
     }
 
     private void Acao_17() {
-        this.codigo.append("ldstr\n");
-        this.codigo.append("call void [mscorlib]System.Console::Write(string)\n");
+        this.codigo.append(" ldstr \n");
+        this.codigo.append(" call void [mscorlib]System.Console::Write(string) \n");
     }
 
     private void Acao_18(Token token) throws SemanticError {
@@ -352,24 +364,24 @@ public class Semantico implements Constants {
         if (!tipo1.equals(tipo2)) {
             throw new SemanticError("Tipos incompatíveis em expressão lógica binária.", token.getPosition());
         }
-        
-        this.codigo.append("and \n");
+
+        this.codigo.append(" and \n");
     }
 
     private void Acao_19(Token token) throws SemanticError {
-       String tipo1 = this.pilhaTipos.pop();
-       String tipo2 = this.pilhaTipos.pop();
+        String tipo1 = this.pilhaTipos.pop();
+        String tipo2 = this.pilhaTipos.pop();
 
-       if (!tipo1.equals(tipo2)) {
-           throw new SemanticError("Tipos incompatíveis em expressão lógica binária.", token.getPosition());
-       }
-        
-       this.codigo.append("or \n");
+        if (!tipo1.equals(tipo2)) {
+            throw new SemanticError("Tipos incompatíveis em expressão lógica binária.", token.getPosition());
+        }
+
+        this.codigo.append(" or \n");
     }
 
     private void Acao_20(Token token) {
         this.pilhaTipos.push(STRING);
-        this.codigo.append(" ldstr ").append(token.getLexeme()).append("\n");
+        this.codigo.append(" ldstr ").append(token.getLexeme()).append(" \n");
     }
 
     private void Acao_21(Token token) {
@@ -405,7 +417,7 @@ public class Semantico implements Constants {
                 localsJaEscrito = true;
             }
         }
-        this.codigo.append(")\n");
+        this.codigo.append(") \n");
         listaId.clear();
     }
 
@@ -419,15 +431,15 @@ public class Semantico implements Constants {
             String classe = "";
             switch (identificador.tipo) {
                 case INT64:
-                    classe = INT64;
+                    classe = "Int64";
                     break;
                 case FLOAT64:
                     classe = "Double";
                     break;
             }
-            this.codigo.append(" call string [mscorlib]System.Console::ReadLine()\n");
-            this.codigo.append(" call ").append(identificador.tipo).append(" [mscorlib]System.").append(classe).append("::Parse(string)\n");
-            this.codigo.append(" stloc ").append(lexeme).append("\n");
+            this.codigo.append(" call string [mscorlib]System.Console::ReadLine() \n");
+            this.codigo.append(" call ").append(identificador.tipo).append(" [mscorlib]System.").append(classe).append("::Parse(string) \n");
+            this.codigo.append(" stloc ").append(lexeme).append(" \n");
         }
         listaId.clear();
     }
@@ -444,21 +456,21 @@ public class Semantico implements Constants {
 
         switch (identificador.classe) {
             case 'v': {
-                this.codigo.append(" ldloc ").append(lexeme).append("\n");
+                this.codigo.append(" ldloc ").append(lexeme).append(" \n");
                 break;
             }
             case 'c': {
                 switch (identificador.tipo) {
                     case INT64: {
-                        this.codigo.append("ldc.i8 ").append(identificador.valor).append("\n");
+                        this.codigo.append(" ldc.i8 ").append(identificador.valor).append(" \n");
                         break;
                     }
                     case FLOAT64: {
-                        this.codigo.append("ldc.r8 ").append(identificador.valor).append("\n");
+                        this.codigo.append(" ldc.r8 ").append(identificador.valor).append(" \n");
                         break;
                     }
                     case STRING: {
-                        this.codigo.append("ldstr ").append(identificador.valor).append("\n");
+                        this.codigo.append(" ldstr ").append(identificador.valor).append(" \n");
                         break;
                     }
                 }
@@ -467,7 +479,7 @@ public class Semantico implements Constants {
         }
 
         if (identificador.tipo.equals(INT64)) {
-            this.codigo.append("conv.r8 \n");
+            this.codigo.append(" conv.r8 \n");
         }
     }
 
@@ -487,10 +499,10 @@ public class Semantico implements Constants {
         }
 
         if (identificador.tipo.equals(INT64)) {
-            this.codigo.append("conv.i8");
+            this.codigo.append(" conv.i8 \n");
         }
 
-        this.codigo.append(" stloc ").append(lexeme).append("\n");
+        this.codigo.append(" stloc ").append(lexeme).append(" \n");
     }
 
     private void Acao_27() {
@@ -498,7 +510,7 @@ public class Semantico implements Constants {
 
         this.pilhaRotulos.push(rotulo);
 
-        this.codigo.append(" ").append(rotulo).append(":\n");
+        this.codigo.append(" ").append(rotulo).append(": \n");
     }
 
     private void Acao_28() {
@@ -506,7 +518,7 @@ public class Semantico implements Constants {
 
         this.pilhaRotulos.push(rotulo);
 
-        this.codigo.append(" brfalse ").append(rotulo).append("\n");
+        this.codigo.append(" brfalse ").append(rotulo).append(" \n");
     }
 
     private void Acao_29() {
@@ -521,15 +533,15 @@ public class Semantico implements Constants {
         String rotulo = this.pilhaRotulos.pop();
         String newRotulo = novoRotulo();
 
-        this.codigo.append(" br ").append(newRotulo).append("\n");
-        this.codigo.append(" ").append(rotulo).append(":\n");
+        this.codigo.append(" br ").append(newRotulo).append(" \n");
+        this.codigo.append(" ").append(rotulo).append(": \n");
     }
 
     private void Acao_31() {
         String rotulo = this.pilhaRotulos.pop();
         String rotulo1 = this.pilhaRotulos.pop();
 
-        this.codigo.append("br ").append(rotulo);
+        this.codigo.append(" br ").append(rotulo1).append(" \n");
         this.codigo.append(rotulo).append(": \n");
     }
 
@@ -542,14 +554,8 @@ public class Semantico implements Constants {
                 throw new SemanticError("Constante " + lexeme + " já declarado.", identificador.getPosition());
             }
             this.TabSimb.put(lexeme, new Identificador('c', tipoVar, token.getLexeme()));
-            if (localsJaEscrito) {
-                this.codigo.append(", ").append(tipoVar).append(" ").append(lexeme);
-            } else {
-                this.codigo.append(" .locals (").append(tipoVar).append(" ").append(lexeme);
-                localsJaEscrito = true;
-            }
         }
-        this.codigo.append(")\n");
+        this.codigo.append(") \n");
         listaId.clear();
     }
 }

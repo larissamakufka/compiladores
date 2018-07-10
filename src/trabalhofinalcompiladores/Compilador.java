@@ -567,7 +567,7 @@ public class Compilador extends JFrame {
             taMensagens.setText(erro);
             return erro;
         } catch (SemanticError semanticError) {
-            String erro = semanticError.getMessage();
+            String erro = "Erro na linha " + getLinha(linhas, semanticError.getPosition()) + " - " + semanticError.getMessage();
             taMensagens.setText(erro);
             return erro;
         }
