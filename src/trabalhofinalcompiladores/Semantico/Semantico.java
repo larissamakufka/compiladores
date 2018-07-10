@@ -68,14 +68,14 @@ public class Semantico implements Constants {
                 this.Acao_6(token);
                 break;
             }
-            /*case 7: {
+            case 7: {
                 this.Acao_7(token);
                 break;
             }
             case 8: {
                 this.Acao_8(token);
                 break;
-            }*/
+            }
             case 9: {
                 this.Acao_9(token);
                 break;
@@ -84,7 +84,7 @@ public class Semantico implements Constants {
                 this.Acao_10(token);
                 break;
             }
-            /*case 11: {
+            case 11: {
                 this.Acao_11();
                 break;
             }
@@ -95,7 +95,7 @@ public class Semantico implements Constants {
             case 13: {
                 this.Acao_13(token);
                 break;
-            }*/
+            }
             case 14: {
                 this.Acao_14();
                 break;
@@ -108,10 +108,10 @@ public class Semantico implements Constants {
                 this.Acao_16();
                 break;
             }
-            /*case 17: {
+            case 17: {
                 this.Acao_17();
                 break;
-            }*/
+            }
             case 18: {
                 this.Acao_18(token);
                 break;
@@ -546,8 +546,6 @@ public class Semantico implements Constants {
     }
 
     private void Acao_32(Token token) throws SemanticError {
-        boolean localsJaEscrito = false;
-
         for (Token identificador : listaId) {
             String lexeme = identificador.getLexeme();
             if (TabSimb.containsKey(lexeme)) {
@@ -555,7 +553,6 @@ public class Semantico implements Constants {
             }
             this.TabSimb.put(lexeme, new Identificador('c', tipoVar, token.getLexeme()));
         }
-        this.codigo.append(") \n");
         listaId.clear();
     }
 }
