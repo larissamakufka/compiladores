@@ -137,7 +137,7 @@ whileTrue  = identificador : "whileTrue"
 
 <comando3> ::= #28 ":" <lista_comandos> <comando4>;
 
-<comando4> ::= end #29 | #30 ifFalse ":" #28 <lista_comandos> end #29;
+<comando4> ::= end #29 | #30 ifFalse ":" <lista_comandos> end #29;
 
 <definicao_tipos> ::= types <definicao_tipo> <lista_definicao_tipos_vazio> | î;
 

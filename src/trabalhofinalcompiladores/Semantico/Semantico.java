@@ -250,7 +250,7 @@ public class Semantico implements Constants {
 
     private void Acao_6(Token token) {
         this.pilhaTipos.push(FLOAT64);
-        this.codigo.append(" ldc.r8 ").append(token.getLexeme()).append(" \n");
+        this.codigo.append(" ldc.r8 ").append(token.getLexeme().replace(',','.')).append(" \n");
     }
 
     private void Acao_7(Token token) throws SemanticError {
@@ -466,7 +466,7 @@ public class Semantico implements Constants {
                         break;
                     }
                     case FLOAT64: {
-                        this.codigo.append(" ldc.r8 ").append(identificador.valor).append(" \n");
+                        this.codigo.append(" ldc.r8 ").append(identificador.valor.replace(',', '.')).append(" \n");
                         break;
                     }
                     case STRING: {
@@ -522,9 +522,7 @@ public class Semantico implements Constants {
     }
 
     private void Acao_29() {
-        String rotulo = this.novoRotulo();
-
-        this.pilhaRotulos.push(rotulo);
+        String rotulo = this.pilhaRotulos.pop();
 
         this.codigo.append(rotulo).append(": \n");
     }
@@ -532,6 +530,8 @@ public class Semantico implements Constants {
     private void Acao_30() {
         String rotulo = this.pilhaRotulos.pop();
         String newRotulo = novoRotulo();
+        
+        this.pilhaRotulos.push(newRotulo);
 
         this.codigo.append(" br ").append(newRotulo).append(" \n");
         this.codigo.append(" ").append(rotulo).append(": \n");
